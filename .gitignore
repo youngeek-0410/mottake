@@ -87,3 +87,8 @@ lib/generated_plugin_registrant.dart
 /Godeps/
 
 # End of https://www.toptal.com/developers/gitignore/api/go,flutter
+
+.env
+firebase-secret.json
+server/tmp
+server/config.yml
