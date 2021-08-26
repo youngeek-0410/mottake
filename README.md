@@ -5,7 +5,7 @@
 ### Backend
 
 1. ```console
-   git clone https://github.com:youngeek-0410/mottake.git
+   git clone git@github.com:youngeek-0410/mottake.git
    cd mottake
    ```
 
