@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    build: ./postgres
+    ports:
+      - "5433:5432"
+    env_file:
+      - ./postgres/.env
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+  server:
+    build: ./server
+    tty: true
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    volumes:
+      - "./server:/go/src/app"
+volumes:
+  postgresql_data:
