@@ -92,3 +92,4 @@ lib/generated_plugin_registrant.dart
 firebase-secret.json
 server/tmp
 server/config.yml
+google-services.json
