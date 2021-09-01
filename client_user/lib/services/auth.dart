@@ -8,10 +8,6 @@ final authServiceProvider = ChangeNotifierProvider<AuthService>((ref) {
 });
 
 class AuthService extends ChangeNotifier {
-  void showInfo() {
-    print('Hello');
-  }
-
   void signIn() async {
     final googleSignIn = GoogleSignIn();
     final firebaseAuth = FirebaseAuth.instance;
