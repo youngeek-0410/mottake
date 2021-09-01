@@ -39,3 +39,13 @@
    ```
 
 1. [localhost](http://localhost) にアクセス
+
+### Frontend(client_user)
+
+1. `client_user/android/app/`に`google-services.json`を追加
+
+1. ```console
+   cd client_user
+   flutter pub get
+   flutter run -d <device>
+   ```
