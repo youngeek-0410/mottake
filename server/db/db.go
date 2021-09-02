@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/youngeek-0410/mottake/server/config"
-	"github.com/youngeek-0410/mottake/server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,5 +20,4 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	Db.AutoMigrate(&models.User{})
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/youngeek-0410/mottake/server/models"
 
 	"github.com/youngeek-0410/mottake/server/config"
 	"github.com/youngeek-0410/mottake/server/db"
@@ -13,6 +14,7 @@ func main() {
 	flag.Parse()
 	config.Init(*c)
 	db.Init()
+	models.Init()
 	r := router.NewRouter()
 	r.Run(config.Config.Port)
 }
