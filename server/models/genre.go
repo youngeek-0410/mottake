@@ -8,13 +8,17 @@ type Genre struct {
 }
 
 type FavoriteGenre struct {
-	Id          int    `json:"id" gorm:"primaryKey"`
+	Id          int `json:"id" gorm:"primaryKey"`
+	Customer    Customer
 	CustomerUid string `json:"customer_uid"`
-	GenreId     int    `json:"genre_id"`
+	Genre       Genre
+	GenreId     int `json:"genre_id"`
 }
 
 type RelatedGenre struct {
-	Id      int    `json:"id" gorm:"primaryKey"`
+	Id      int `json:"id" gorm:"primaryKey"`
+	Shop    Shop
 	ShopUid string `json:"shop_Uid"`
-	GenreId int    `json:"genre_id"`
+	Genre   Genre
+	GenreId int `json:"genre_id"`
 }
