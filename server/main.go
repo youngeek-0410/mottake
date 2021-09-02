@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"github.com/youngeek-0410/mottake/server/models"
 
 	"github.com/youngeek-0410/mottake/server/config"
 	"github.com/youngeek-0410/mottake/server/db"
+	"github.com/youngeek-0410/mottake/server/models"
 	"github.com/youngeek-0410/mottake/server/router"
 )
 
