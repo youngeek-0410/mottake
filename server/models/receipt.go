@@ -5,8 +5,8 @@ import (
 )
 
 type Receipt struct {
-	Id          int `json:"id" gorm:"primaryKey"`
+	ID          int `json:"id" gorm:"primaryKey"`
 	Customer    Customer
-	CustomerUid string    `json:"customer_uid"`
+	CustomerUID string    `json:"customer_uid"`
 	CreatedAt   time.Time `json:"created_at"`
 }
