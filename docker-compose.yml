@@ -8,14 +8,20 @@ services:
       - ./postgres/.env
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-  server:
+  app:
     build: ./server
     tty: true
     ports:
-      - "80:80"
+      - "8080:8080"
     depends_on:
       - db
     volumes:
       - "./server:/go/src/app"
+  web:
+    build: nginx/.
+    ports:
+      - "8000:80"
+    depends_on:
+      - app
 volumes:
   postgresql_data:
