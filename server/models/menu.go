@@ -1,8 +1,8 @@
 package models
 
 type Menu struct {
-	Id        int    `json:"id" gorm:"primaryKey"`
-	ShopUid   string `json:"shop_uid"`
+	ID        int    `json:"id" gorm:"primaryKey"`
+	ShopUID   string `json:"shop_uid"`
 	Name      string `json:"name"`
 	Price     int    `json:"price"`
 	Image     string `json:"image"`

@@ -1,7 +1,7 @@
 package models
 
 type Purchase struct {
-	Id     int `json:"id" gorm:"primaryKey"`
-	MenuId int `json:"menu_id"`
+	ID     int `json:"id" gorm:"primaryKey"`
+	MenuID int `json:"menu_id"`
 	Number int `json:"number"`
 }

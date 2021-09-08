@@ -1,7 +1,7 @@
 package models
 
 type Shop struct {
-	Uid           string `json:"uid" gorm:"primaryKey"`
+	UID           string `json:"uid" gorm:"primaryKey"`
 	Name          string `json:"name"`
 	Email         string `json:"email"`
 	Image         string `json:"image"`
