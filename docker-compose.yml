@@ -17,10 +17,11 @@ services:
       - db
     volumes:
       - "./server:/go/src/app"
+    container_name: app
   web:
     build: nginx/.
     ports:
-      - "8000:80"
+      - "80:80"
     depends_on:
       - app
 volumes:
