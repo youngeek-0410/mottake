@@ -14,6 +14,8 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 	if !(config.Config.Mode == config.ModeDevelop) {
 		r.Use(middleware.Auth())
+	}else{
+		r.Use(middleware.Dummy())
 	}
 
 	index := new(controllers.IndexController)
