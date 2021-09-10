@@ -45,3 +45,11 @@ func Auth() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func Dummy() gin.HandlerFunc {
+	return func(c *gin.Context){
+		token := &auth.Token{UID: "dummy"}
+		c.Set("token", token)
+		c.Next()
+	}
+}
