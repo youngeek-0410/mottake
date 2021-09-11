@@ -15,6 +15,7 @@ func main() {
 	config.Init(*c)
 	db.Init()
 	models.Init()
+	models.InitGenres()
 	r := router.NewRouter()
 	r.Run(config.Config.Port)
 }

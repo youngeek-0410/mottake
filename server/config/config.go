@@ -7,7 +7,7 @@ import (
 )
 
 type ServerConfig struct {
-	DbConfig struct {
+	DBConfig struct {
 		Host     string
 		User     string
 		Name     string
