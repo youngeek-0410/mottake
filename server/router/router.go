@@ -18,6 +18,11 @@ func NewRouter() *gin.Engine {
 
 	index := new(controllers.IndexController)
 	r.GET("/", index.Get)
+	shop := new(controllers.ShopController)
+	r.GET("/shop/:uid", shop.Get)
+	r.POST("/management/shop", shop.Post)
+	r.PATCH("/management/shop/:uid", shop.Patch)
+	r.DELETE("management/shop/:uid", shop.Delete)
 
 	return r
 
