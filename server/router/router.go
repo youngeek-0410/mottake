@@ -14,12 +14,16 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 	if !(config.Config.Mode == config.ModeDevelop) {
 		r.Use(middleware.Auth())
-	}else{
+	} else {
 		r.Use(middleware.Dummy())
 	}
 
 	index := new(controllers.IndexController)
 	r.GET("/", index.Get)
+
+	receipt := new(controllers.ReceiptController)
+	r.GET("/user/receipt", receipt.All)
+	r.POST("/management/shop/receipt", receipt.Create)
 
 	return r
 
