@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/youngeek-0410/mottake/server/db"
 	"github.com/youngeek-0410/mottake/server/models"
-	"github.com/youngeek-0410/mottake/server/utils"
 )
 
 type ShopController struct{}
@@ -27,10 +26,7 @@ func (i ShopController) Post(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	if utils.GetToken(c).UID != shop.UID {
-		c.JSON(http.StatusBadRequest, nil)
-		return
-	}
+	shop.UID = getUID(c)
 	if err := db.Db.Create(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -40,7 +36,7 @@ func (i ShopController) Post(c *gin.Context) {
 
 func (i ShopController) Patch(c *gin.Context) {
 	var shop models.Shop
-	uid := c.Param("uid")
+	uid := getUID(c)
 	if err := db.Db.Where("UID=?", uid).First(&shop).Error; err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 		return
@@ -49,10 +45,7 @@ func (i ShopController) Patch(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	if utils.GetToken(c).UID != shop.UID {
-		c.JSON(http.StatusBadRequest, nil)
-		return
-	}
+	shop.UID = uid
 	if err := db.Db.Updates(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -62,7 +55,7 @@ func (i ShopController) Patch(c *gin.Context) {
 
 func (i ShopController) Delete(c *gin.Context) {
 	var shop models.Shop
-	uid := c.Param("uid")
+	uid := getUID(c)
 	if err := db.Db.Where("UID=?", uid).First(&shop).Error; err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 		return
@@ -71,10 +64,7 @@ func (i ShopController) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
-	if utils.GetToken(c).UID != shop.UID {
-		c.JSON(http.StatusBadRequest, nil)
-		return
-	}
+	shop.UID = uid
 	if err := db.Db.Delete(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return

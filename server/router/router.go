@@ -14,7 +14,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 	if !(config.Config.Mode == config.ModeDevelop) {
 		r.Use(middleware.Auth())
-	}else{
+	} else {
 		r.Use(middleware.Dummy())
 	}
 
@@ -23,8 +23,8 @@ func NewRouter() *gin.Engine {
 	shop := new(controllers.ShopController)
 	r.GET("/shop/:uid", shop.Get)
 	r.POST("/management/shop", shop.Post)
-	r.PATCH("/management/shop/:uid", shop.Patch)
-	r.DELETE("management/shop/:uid", shop.Delete)
+	r.PATCH("/management/shop", shop.Patch)
+	r.DELETE("management/shop", shop.Delete)
 
 	return r
 
