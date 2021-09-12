@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,8 +14,9 @@ type ShopController struct{}
 func (i ShopController) Get(c *gin.Context) {
 	var shop models.Shop
 	uid := c.Param("uid")
-	if err := db.Db.Where("UID=?", uid).First(&shop).Error; err != nil {
+	if err := db.DB.Where("UID=?", uid).First(&shop).Error; err != nil {
 		c.JSON(http.StatusNotFound, nil)
+		log.Println(err)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -22,13 +24,21 @@ func (i ShopController) Get(c *gin.Context) {
 
 func (i ShopController) Post(c *gin.Context) {
 	var shop models.Shop
-	if err := c.BindJSON(&shop); err != nil {
+	err := c.BindJSON(&shop)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, nil)
+		log.Println(err)
 		return
 	}
 	shop.UID = getUID(c)
-	if err := db.Db.Create(&shop).Error; err != nil {
+	if shop.Coordinate, err = AddressToCoordinate(shop.Address); err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
+		log.Println(err)
+		return
+	}
+	if err := db.DB.Create(&shop).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+		log.Println(err)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -37,17 +47,26 @@ func (i ShopController) Post(c *gin.Context) {
 func (i ShopController) Patch(c *gin.Context) {
 	var shop models.Shop
 	uid := getUID(c)
-	if err := db.Db.Where("UID=?", uid).First(&shop).Error; err != nil {
+	if err := db.DB.Where("UID=?", uid).First(&shop).Error; err != nil {
 		c.JSON(http.StatusBadRequest, nil)
+		log.Println(err)
 		return
 	}
-	if err := c.BindJSON(&shop); err != nil {
+	err := c.BindJSON(&shop)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, nil)
+		log.Println(err)
 		return
 	}
 	shop.UID = uid
-	if err := db.Db.Updates(&shop).Error; err != nil {
+	if shop.Coordinate, err = AddressToCoordinate(shop.Address); err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
+		log.Println(err)
+		return
+	}
+	if err := db.DB.Updates(&shop).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+		log.Println(err)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -56,17 +75,15 @@ func (i ShopController) Patch(c *gin.Context) {
 func (i ShopController) Delete(c *gin.Context) {
 	var shop models.Shop
 	uid := getUID(c)
-	if err := db.Db.Where("UID=?", uid).First(&shop).Error; err != nil {
+	if err := db.DB.Where("UID=?", uid).First(&shop).Error; err != nil {
 		c.JSON(http.StatusBadRequest, nil)
+		log.Println(err)
 		return
 	}
-	if err := c.BindJSON(&shop); err != nil {
-		c.JSON(http.StatusBadRequest, nil)
-		return
-	}
-	shop.UID = uid
-	if err := db.Db.Delete(&shop).Error; err != nil {
+	var emptyShop models.Shop
+	if err := db.DB.Delete(&emptyShop, uid).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
+		log.Println(err)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
