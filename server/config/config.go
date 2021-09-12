@@ -7,15 +7,16 @@ import (
 )
 
 type ServerConfig struct {
-	DbConfig struct {
+	DBConfig struct {
 		Host     string
 		User     string
 		Name     string
 		Password string
 	} `mapstructure:"db_config"`
-	FirebaseSecret string `mapstructure:"firebase_secret"`
-	Mode           string
-	Port           string
+	FirebaseSecret   string `mapstructure:"firebase_secret"`
+	Mode             string
+	Port             string
+	GeocoderClientID string `mapstructure:"geocoder_client_id"`
 }
 
 const (
