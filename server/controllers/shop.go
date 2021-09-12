@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/youngeek-0410/mottake/server/db"
 	"github.com/youngeek-0410/mottake/server/models"
+	"github.com/youngeek-0410/mottake/server/utils"
 )
 
 type ShopController struct{}
@@ -20,10 +21,13 @@ func (i ShopController) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, shop)
 }
 
-// TODO: UIDのバリデーションをする
 func (i ShopController) Post(c *gin.Context) {
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
+		c.JSON(http.StatusBadRequest, nil)
+		return
+	}
+	if utils.GetToken(c).UID != shop.UID {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
@@ -45,6 +49,10 @@ func (i ShopController) Patch(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
+	if utils.GetToken(c).UID != shop.UID {
+		c.JSON(http.StatusBadRequest, nil)
+		return
+	}
 	if err := db.Db.Updates(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		return
@@ -60,6 +68,10 @@ func (i ShopController) Delete(c *gin.Context) {
 		return
 	}
 	if err := c.BindJSON(&shop); err != nil {
+		c.JSON(http.StatusBadRequest, nil)
+		return
+	}
+	if utils.GetToken(c).UID != shop.UID {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
