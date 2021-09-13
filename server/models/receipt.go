@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/youngeek-0410/mottake/server/db"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Receipt struct {
@@ -39,14 +40,11 @@ func (r ReceiptModel) RegisterPurchases(receiptID int, purchases []Purchase) err
 	return nil
 }
 
-func (r ReceiptModel) GetOneByID(receiptID int, preload bool) (*Receipt, error) {
+func (r ReceiptModel) GetOne(receiptID int, customerUID string) (*Receipt, error) {
 	var receipt Receipt
 	var result *gorm.DB
-	if preload {
-		result = db.Db.Where("id = ?", receiptID).Preload("Purchases").First(&receipt)
-	} else {
-		result = db.Db.Where("id = ?", receiptID).First(&receipt)
-	}
+
+	result = db.Db.Where("id = ? AND customer_uid = ?", receiptID, customerUID).Preload("Purchases").First(&receipt)
 
 	if err := result.Error; err != nil {
 		return nil, err
@@ -54,14 +52,11 @@ func (r ReceiptModel) GetOneByID(receiptID int, preload bool) (*Receipt, error) 
 	return &receipt, nil
 }
 
-func (r ReceiptModel) All(customerUID string, preload bool) ([]Receipt, error) {
+func (r ReceiptModel) All(customerUID string) ([]Receipt, error) {
 	var receipts []Receipt
 	var result *gorm.DB
-	if preload {
-		result = db.Db.Where("customer_uid = ?", customerUID).Preload("Purchases").Find(&receipts)
-	} else {
-		result = db.Db.Where("customer_uid = ?", customerUID).Find(&receipts)
-	}
+	result = db.Db.Where("customer_uid = ?", customerUID).Preload("Purchases").Find(&receipts)
+
 	if err := result.Error; err != nil {
 		return nil, err
 	}

@@ -22,7 +22,7 @@ var receiptModel = new(models.ReceiptModel)
 
 func (r ReceiptController) All(c *gin.Context) {
 	uid := getUID(c)
-	receipts, err := receiptModel.All(uid, true)
+	receipts, err := receiptModel.All(uid)
 	if err != nil {
 		_ = c.Error(ErrCouldNotQueryReceipts).SetType(gin.ErrorTypePublic)
 		return
@@ -51,7 +51,7 @@ func (r ReceiptController) Create(c *gin.Context) {
 		_ = c.Error(ErrCouldNotRegisterPurchases).SetType(gin.ErrorTypePublic)
 		return
 	}
-	receipt, _ := receiptModel.GetOneByID(receiptID, true)
+	receipt, _ := receiptModel.GetOne(receiptID, customerPurchase.UID)
 
 	c.JSON(http.StatusCreated, receipt)
 }
