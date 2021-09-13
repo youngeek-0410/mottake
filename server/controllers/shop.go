@@ -24,18 +24,20 @@ func (i ShopController) Get(c *gin.Context) {
 
 func (i ShopController) Post(c *gin.Context) {
 	var shop models.Shop
-	err := c.BindJSON(&shop)
-	if err != nil {
+	if err := c.BindJSON(&shop); err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 		log.Println(err)
 		return
 	}
 	shop.UID = getUID(c)
-	if shop.Coordinate, err = AddressToCoordinate(shop.Address); err != nil {
+	coordinate, err := AddressToCoordinate(shop.Address)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		log.Println(err)
 		return
 	}
+	shop.Latitude = coordinate.Latitude
+	shop.Longitude = coordinate.Longitude
 	if err := db.DB.Create(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		log.Println(err)
@@ -52,18 +54,20 @@ func (i ShopController) Patch(c *gin.Context) {
 		log.Println(err)
 		return
 	}
-	err := c.BindJSON(&shop)
-	if err != nil {
+	if err := c.BindJSON(&shop); err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 		log.Println(err)
 		return
 	}
 	shop.UID = uid
-	if shop.Coordinate, err = AddressToCoordinate(shop.Address); err != nil {
+	coordinate, err := AddressToCoordinate(shop.Address)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		log.Println(err)
 		return
 	}
+	shop.Latitude = coordinate.Longitude
+	shop.Longitude = coordinate.Longitude
 	if err := db.DB.Updates(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		log.Println(err)
@@ -80,10 +84,10 @@ func (i ShopController) Delete(c *gin.Context) {
 		log.Println(err)
 		return
 	}
-	var emptyShop models.Shop
-	if err := db.DB.Delete(&emptyShop, uid).Error; err != nil {
+	if err := db.DB.Delete(&shop).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 		log.Println(err)
+		log.Println("uid=", uid)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
