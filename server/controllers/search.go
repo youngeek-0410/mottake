@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/youngeek-0410/mottake/server/db"
@@ -26,7 +25,7 @@ func (i SearchController) Get(c *gin.Context) {
 	var sortedShops []models.Shop
 	// クエリの緯度経度から範囲内の店をソート
 	sqlQuery := "SELECT * FROM shops WHERE ABS(@latitude - latitude) < @latrange AND ABS(@longitude - longitude) < @lonrange ORDER BY ABS(@latitude - latitude), ABS(@longitude - longitude) LIMIT @num"
-	db.DB.Raw(sqlQuery, sql.Named("latitude", latitude), sql.Named("latrange", strconv.FormatFloat(latitudeRange, 'f', -1, 32)), sql.Named("longitude", longitude), sql.Named("lonrange", strconv.FormatFloat(longitudeRange, 'f', -1, 32)), sql.Named("num", numberOfShops)).Scan(&sortedShops)
+	db.DB.Raw(sqlQuery, sql.Named("latitude", latitude), sql.Named("latrange", latitudeRange), sql.Named("longitude", longitude), sql.Named("lonrange", longitudeRange), sql.Named("num", numberOfShops)).Scan(&sortedShops)
 
 	c.JSON(http.StatusOK, sortedShops)
 }
