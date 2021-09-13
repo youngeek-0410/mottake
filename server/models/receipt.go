@@ -22,7 +22,7 @@ func (r ReceiptModel) Create(customerUID string) (receiptID int, err error) {
 		CustomerUID: customerUID,
 		CreatedAt:   time.Now(),
 	}
-	result := db.Db.Create(&receipt)
+	result := db.DB.Create(&receipt)
 	if err := result.Error; err != nil {
 		return -1, err
 	}
@@ -32,7 +32,7 @@ func (r ReceiptModel) Create(customerUID string) (receiptID int, err error) {
 func (r ReceiptModel) RegisterPurchases(receiptID int, purchases []Purchase) error {
 	for _, purchase := range purchases {
 		purchase.ReceiptID = receiptID
-		result := db.Db.Create(&purchase)
+		result := db.DB.Create(&purchase)
 		if err := result.Error; err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ func (r ReceiptModel) GetOne(receiptID int, customerUID string) (*Receipt, error
 	var receipt Receipt
 	var result *gorm.DB
 
-	result = db.Db.Where("id = ? AND customer_uid = ?", receiptID, customerUID).Preload("Purchases").First(&receipt)
+	result = db.DB.Where("id = ? AND customer_uid = ?", receiptID, customerUID).Preload("Purchases").First(&receipt)
 
 	if err := result.Error; err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (r ReceiptModel) GetOne(receiptID int, customerUID string) (*Receipt, error
 func (r ReceiptModel) All(customerUID string) ([]Receipt, error) {
 	var receipts []Receipt
 	var result *gorm.DB
-	result = db.Db.Where("customer_uid = ?", customerUID).Preload("Purchases").Find(&receipts)
+	result = db.DB.Where("customer_uid = ?", customerUID).Preload("Purchases").Find(&receipts)
 
 	if err := result.Error; err != nil {
 		return nil, err
