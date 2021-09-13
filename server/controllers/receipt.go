@@ -31,27 +31,27 @@ func (r ReceiptController) All(c *gin.Context) {
 }
 
 func (r ReceiptController) Create(c *gin.Context) {
-	customerPurchase := struct {
+	customerPurchases := struct {
 		UID       string            `json:"uid"`
 		Purchases []models.Purchase `json:"purchases"`
 	}{}
-	err := json.NewDecoder(c.Request.Body).Decode(&customerPurchase)
+	err := json.NewDecoder(c.Request.Body).Decode(&customerPurchases)
 	if err != nil {
 		_ = c.Error(ErrInvalidJSONRequest).SetType(gin.ErrorTypePublic)
 		return
 	}
 
-	receiptID, err := receiptModel.Create(customerPurchase.UID)
+	receiptID, err := receiptModel.Create(customerPurchases.UID)
 	if err != nil {
 		_ = c.Error(ErrCouldNotCreateReceipt).SetType(gin.ErrorTypePublic)
 		return
 	}
-	err = receiptModel.RegisterPurchases(receiptID, customerPurchase.Purchases)
+	err = receiptModel.RegisterPurchases(receiptID, customerPurchases.Purchases)
 	if err != nil {
 		_ = c.Error(ErrCouldNotRegisterPurchases).SetType(gin.ErrorTypePublic)
 		return
 	}
-	receipt, _ := receiptModel.GetOne(receiptID, customerPurchase.UID)
+	receipt, _ := receiptModel.GetOne(receiptID, customerPurchases.UID)
 
 	c.JSON(http.StatusCreated, receipt)
 }
