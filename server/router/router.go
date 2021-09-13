@@ -25,6 +25,8 @@ func NewRouter() *gin.Engine {
 	r.POST("/management/shop", shop.Post)
 	r.PATCH("/management/shop", shop.Patch)
 	r.DELETE("management/shop", shop.Delete)
+	search := new(controllers.SearchController)
+	r.GET("/shop/search", search.Get)
 
 	return r
 
