@@ -6,24 +6,24 @@ import (
 )
 
 type Shop struct {
-	UID           string  `json:"uid" gorm:"primaryKey"`
-	Name          string  `json:"name"`
-	Image         string  `json:"image"`
-	Address       string  `json:"address"`
-	Latitude      float32 `json:"latitude"`
-	Longitude     float32 `json:"longitude"`
-	SalesGoal     int     `json:"sales_goal"`
-	Sales         int     `json:"sales"`
-	Description   string  `json:"description"`
-	Menus         []Menu
-	RelatedGenres []RelatedGenre
+	UID           string         `json:"uid" gorm:"primaryKey"`
+	Name          string         `json:"name"`
+	Image         string         `json:"image"`
+	Address       string         `json:"address"`
+	Latitude      float32        `json:"latitude"`
+	Longitude     float32        `json:"longitude"`
+	SalesGoal     int            `json:"sales_goal"`
+	Sales         int            `json:"sales"`
+	Description   string         `json:"description"`
+	Menus         []Menu         `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	RelatedGenres []RelatedGenre `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type ShopModel struct{}
 
 func (r ShopModel) GetByID(uid string) (Shop, error) {
 	var shop Shop
-	if err := db.DB.Where("UID=?", uid).First(&shop).Error; err != nil {
+	if err := db.DB.Where("UID=?", uid).Preload("RelatedGenres").First(&shop).Error; err != nil {
 		return shop, err
 	}
 	return shop, nil

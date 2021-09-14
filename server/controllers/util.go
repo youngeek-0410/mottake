@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	NameRegexp        = regexp.MustCompile(`^[^£$§¡€¢§¶ªº«\\/]{1,30}$`)
-	DescriptionRegexp = regexp.MustCompile(`^[^£$§¡€¢§¶ªº«\\/]{1,255}$`)
+	NameRegexp        = regexp.MustCompile(`[^£$§¡€¢§¶ªº«\\/]{1,30}`)
+	DescriptionRegexp = regexp.MustCompile(`[^£$§¡€¢§¶ªº«\\/]{1,255}`)
 )
 
 func getUID(c *gin.Context) string {

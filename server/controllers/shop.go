@@ -45,12 +45,12 @@ func (i ShopController) Post(c *gin.Context) {
 	}
 
 	// Nameのバリデーション
-	if match := NameRegexp.MatchString(shop.Name); match != false {
+	if match := NameRegexp.MatchString(shop.Name); match == false {
 		c.JSON(http.StatusBadRequest, ErrInvalidName)
 		return
 	}
 	// Descriptionのバリデーション
-	if match := DescriptionRegexp.MatchString(shop.Description); match != false {
+	if match := DescriptionRegexp.MatchString(shop.Description); match == false {
 		c.JSON(http.StatusBadRequest, ErrInvalidDescription)
 		return
 	}
