@@ -9,13 +9,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var Db *gorm.DB
+var DB *gorm.DB
 
 func Init() {
 	var err error
 	c := config.Config
-	dsn := fmt.Sprintf("host=%s user=%s dbname=%s password=%s", c.DbConfig.Host, c.DbConfig.User, c.DbConfig.Name, c.DbConfig.Password)
-	Db, err = gorm.Open(postgres.Open(dsn))
+	dsn := fmt.Sprintf("host=%s user=%s dbname=%s password=%s", c.DBConfig.Host, c.DBConfig.User, c.DBConfig.Name, c.DBConfig.Password)
+	DB, err = gorm.Open(postgres.Open(dsn))
 	if err != nil {
 		log.Fatal(err)
 	}

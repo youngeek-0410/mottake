@@ -7,12 +7,13 @@ import (
 )
 
 type ServerConfig struct {
-	DbConfig struct {
+	DBConfig struct {
 		Host     string
 		User     string
 		Name     string
 		Password string
 	} `mapstructure:"db_config"`
+	StorageBucket  string `mapstructure:"storage_bucket"`
 	FirebaseSecret string `mapstructure:"firebase_secret"`
 	Mode           string
 	Port           string

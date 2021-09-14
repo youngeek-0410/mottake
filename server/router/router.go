@@ -14,12 +14,18 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.ErrorHandler())
 	if !(config.Config.Mode == config.ModeDevelop) {
 		r.Use(middleware.Auth())
-	}else{
+	} else {
 		r.Use(middleware.Dummy())
 	}
 
 	index := new(controllers.IndexController)
 	r.GET("/", index.Get)
+	menu := new(controllers.MenuController)
+	r.GET("/shop/:uid/menu", menu.All)
+	r.GET("/shop/:uid/menu/:menuID", menu.One)
+	r.POST("/management/shop/menu", menu.Create)
+	r.PATCH("/management/shop/menu/:menuID", menu.Update)
+	r.DELETE("/management/shop/menu/:menuID", menu.Delete)
 
 	return r
 
