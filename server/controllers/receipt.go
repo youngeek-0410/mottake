@@ -32,7 +32,7 @@ func (r ReceiptController) Create(c *gin.Context) {
 	var receipt models.Receipt
 	shopUID := getUID(c)
 
-	if err := c.BindJSON(&receipt);err != nil{
+	if err := c.ShouldBindJSON(&receipt);err != nil{
 		_ = c.Error(ErrInvalidJSONRequest).SetType(gin.ErrorTypePublic)
 		return
 	}

@@ -10,9 +10,9 @@ import (
 type Receipt struct {
 	ID          int        `json:"id" gorm:"primaryKey"`
 	Customer    *Customer  `json:"customer,omitempty"`
-	CustomerUID string     `json:"customer_uid"`
+	CustomerUID string     `json:"customer_uid" binding:"required"`
 	CreatedAt   time.Time  `json:"created_at"`
-	Purchases   []Purchase `json:"purchases,omitempty"`
+	Purchases   []Purchase `json:"purchases,omitempty" binding:"required"`
 }
 
 type ReceiptModel struct{}
