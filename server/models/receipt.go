@@ -22,7 +22,7 @@ func (r ReceiptModel) Create(receipt Receipt, shopUID string) (receiptID int, er
 	err = db.DB.Transaction(func(tx *gorm.DB) error {
 		var shop Shop
 		var total int
-		if err = db.DB.Where("uid = ?", shopUID).First(&shop).Error; err != nil {
+		if err = tx.Where("uid = ?", shopUID).First(&shop).Error; err != nil {
 			return err
 		}
 		sales := shop.Sales
@@ -30,22 +30,22 @@ func (r ReceiptModel) Create(receipt Receipt, shopUID string) (receiptID int, er
 			CustomerUID: receipt.CustomerUID,
 			CreatedAt:   time.Now(),
 		}
-		if err := db.DB.Create(&r).Error; err != nil {
+		if err := tx.Create(&r).Error; err != nil {
 			return err
 		}
 		receiptID = r.ID
 		for _, purchase := range receipt.Purchases {
 			purchase.ReceiptID = receiptID
-			if err := db.DB.Create(&purchase).Error; err != nil {
+			if err := tx.Create(&purchase).Error; err != nil {
 				return err
 			}
-			if err = db.DB.Where("id = ?", purchase.ID).Preload("Menu").First(&purchase).Error; err != nil{
+			if err = tx.Where("id = ?", purchase.ID).Preload("Menu").First(&purchase).Error; err != nil {
 				return err
 			}
 			total = total + (purchase.Menu.Price * purchase.Number)
 		}
 		shop.Sales = sales + total
-		if err = db.DB.Updates(&shop).Error; err != nil {
+		if err = tx.Updates(&shop).Error; err != nil {
 			return err
 		}
 
