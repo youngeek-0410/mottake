@@ -9,6 +9,7 @@ type Shop struct {
 	Longitude     float32 `json:"longitude"`
 	SalesGoal     int     `json:"sales_goal"`
 	Sales         int     `json:"sales"`
+	Description   string  `json:"description"`
 	Menus         []Menu
 	RelatedGenres []RelatedGenre
 }
