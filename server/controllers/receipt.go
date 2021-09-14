@@ -10,10 +10,9 @@ import (
 )
 
 var (
-	ErrInvalidJSONRequest        = errors.New("invalid json request")
-	ErrCouldNotCreateReceipt     = errors.New("could not create receipt")
-	ErrCouldNotRegisterPurchases = errors.New("could not register purchases")
-	ErrCouldNotQueryReceipts     = errors.New("could not query receipts")
+	ErrInvalidJSONRequest    = errors.New("invalid json request")
+	ErrCouldNotCreateReceipt = errors.New("could not create receipt")
+	ErrCouldNotQueryReceipts = errors.New("could not query receipts")
 )
 
 type ReceiptController struct{}
@@ -41,14 +40,9 @@ func (r ReceiptController) Create(c *gin.Context) {
 		return
 	}
 
-	receiptID, err := receiptModel.Create(customerPurchases.UID)
+	receiptID, err := receiptModel.Create(customerPurchases.UID, customerPurchases.Purchases)
 	if err != nil {
 		_ = c.Error(ErrCouldNotCreateReceipt).SetType(gin.ErrorTypePublic)
-		return
-	}
-	err = receiptModel.RegisterPurchases(receiptID, customerPurchases.Purchases)
-	if err != nil {
-		_ = c.Error(ErrCouldNotRegisterPurchases).SetType(gin.ErrorTypePublic)
 		return
 	}
 	receipt, _ := receiptModel.GetOneByID(receiptID, customerPurchases.UID)

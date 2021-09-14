@@ -17,27 +17,28 @@ type Receipt struct {
 
 type ReceiptModel struct{}
 
-func (r ReceiptModel) Create(customerUID string) (receiptID int, err error) {
-	receipt := Receipt{
-		CustomerUID: customerUID,
-		CreatedAt:   time.Now(),
-	}
-	result := db.DB.Create(&receipt)
-	if err := result.Error; err != nil {
-		return -1, err
-	}
-	return receipt.ID, nil
-}
+func (r ReceiptModel) Create(customerUID string, purchases []Purchase) (receiptID int, err error) {
 
-func (r ReceiptModel) RegisterPurchases(receiptID int, purchases []Purchase) error {
-	for _, purchase := range purchases {
-		purchase.ReceiptID = receiptID
-		result := db.DB.Create(&purchase)
+	err = db.DB.Transaction(func(tx *gorm.DB) error {
+		receipt := Receipt{
+			CustomerUID: customerUID,
+			CreatedAt:   time.Now(),
+		}
+		result := db.DB.Create(&receipt)
 		if err := result.Error; err != nil {
 			return err
 		}
-	}
-	return nil
+		receiptID = receipt.ID
+		for _, purchase := range purchases {
+			purchase.ReceiptID = receiptID
+			result := db.DB.Create(&purchase)
+			if err := result.Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	return receiptID, err
 }
 
 func (r ReceiptModel) GetOneByID(receiptID int, customerUID string) (*Receipt, error) {
