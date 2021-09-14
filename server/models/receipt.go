@@ -40,7 +40,7 @@ func (r ReceiptModel) RegisterPurchases(receiptID int, purchases []Purchase) err
 	return nil
 }
 
-func (r ReceiptModel) GetOne(receiptID int, customerUID string) (*Receipt, error) {
+func (r ReceiptModel) GetOneByID(receiptID int, customerUID string) (*Receipt, error) {
 	var receipt Receipt
 	var result *gorm.DB
 

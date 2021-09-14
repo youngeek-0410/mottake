@@ -51,7 +51,7 @@ func (r ReceiptController) Create(c *gin.Context) {
 		_ = c.Error(ErrCouldNotRegisterPurchases).SetType(gin.ErrorTypePublic)
 		return
 	}
-	receipt, _ := receiptModel.GetOne(receiptID, customerPurchases.UID)
+	receipt, _ := receiptModel.GetOneByID(receiptID, customerPurchases.UID)
 
 	c.JSON(http.StatusCreated, receipt)
 }
