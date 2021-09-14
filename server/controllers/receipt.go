@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -30,22 +29,20 @@ func (r ReceiptController) All(c *gin.Context) {
 }
 
 func (r ReceiptController) Create(c *gin.Context) {
-	customerPurchases := struct {
-		UID       string            `json:"uid"`
-		Purchases []models.Purchase `json:"purchases"`
-	}{}
-	err := json.NewDecoder(c.Request.Body).Decode(&customerPurchases)
-	if err != nil {
+	var receipt models.Receipt
+	shopUID := getUID(c)
+
+	if err := c.BindJSON(&receipt);err != nil{
 		_ = c.Error(ErrInvalidJSONRequest).SetType(gin.ErrorTypePublic)
 		return
 	}
 
-	receiptID, err := receiptModel.Create(customerPurchases.UID, customerPurchases.Purchases)
+	receiptID, err := receiptModel.Create(receipt, shopUID)
 	if err != nil {
 		_ = c.Error(ErrCouldNotCreateReceipt).SetType(gin.ErrorTypePublic)
 		return
 	}
-	receipt, _ := receiptModel.GetOneByID(receiptID, customerPurchases.UID)
+	receipt, _ = receiptModel.GetOneByID(receiptID, receipt.CustomerUID)
 
 	c.JSON(http.StatusCreated, receipt)
 }
