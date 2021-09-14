@@ -1,10 +1,17 @@
 package controllers
 
 import (
+	"regexp"
+
 	"firebase.google.com/go/v4/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/youngeek-0410/mottake/server/config"
 	"github.com/youngeek-0410/mottake/server/geocoder"
+)
+
+var (
+	NameRegexp        = regexp.MustCompile(`^[^£$§¡€¢§¶ªº«\\/]{1,30}$`)
+	DescriptionRegexp = regexp.MustCompile(`^[^£$§¡€¢§¶ªº«\\/]{1,255}$`)
 )
 
 func getUID(c *gin.Context) string {
