@@ -2,15 +2,17 @@ package models
 
 import (
 	"github.com/youngeek-0410/mottake/server/db"
+	"gorm.io/plugin/soft_delete"
 )
 
 type Menu struct {
-	ID        int        `json:"id" gorm:"primaryKey"`
-	ShopUID   string     `json:"shop_uid" gorm:"uniqueIndex:unique_menu"`
-	Name      string     `json:"name" gorm:"uniqueIndex:unique_menu"`
-	Price     int        `json:"price"`
-	Image     string     `json:"image"`
-	Purchases []Purchase `json:"purchases,omitempty"`
+	ID        int                   `json:"id" gorm:"primaryKey"`
+	ShopUID   string                `json:"shop_uid" gorm:"uniqueIndex:unique_menu"`
+	Name      string                `json:"name" gorm:"uniqueIndex:unique_menu"`
+	Price     int                   `json:"price"`
+	Image     string                `json:"image"`
+	Purchases []Purchase            `json:"purchases,omitempty"`
+	DeletedAt soft_delete.DeletedAt `json:"deleted_at" gorm:"uniqueIndex:unique_menu"`
 }
 
 type MenuModel struct{}
