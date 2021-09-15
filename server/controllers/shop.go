@@ -23,7 +23,7 @@ type ShopController struct{}
 
 var shopModel = new(models.ShopModel)
 
-func (i ShopController) Get(c *gin.Context) {
+func (i ShopController) GetByID(c *gin.Context) {
 	uid := c.Param("uid")
 	shop, err := shopModel.GetByID(uid)
 	if err != nil {
@@ -33,7 +33,7 @@ func (i ShopController) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, shop)
 }
 
-func (i ShopController) Post(c *gin.Context) {
+func (i ShopController) Create(c *gin.Context) {
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidJSON})
@@ -67,7 +67,7 @@ func (i ShopController) Post(c *gin.Context) {
 	c.JSON(http.StatusOK, returnedShop)
 }
 
-func (i ShopController) Patch(c *gin.Context) {
+func (i ShopController) Update(c *gin.Context) {
 	uid := getUID(c)
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
