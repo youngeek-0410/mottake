@@ -43,7 +43,7 @@ func (r ShopModel) Update(shop Shop, uid string, latitude float32, longitude flo
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		// uidのバリデーション
 		var err error
-		shop, err = r.GetByID(uid)
+		_, err = r.GetByID(uid)
 		if err != nil {
 			return err
 		}

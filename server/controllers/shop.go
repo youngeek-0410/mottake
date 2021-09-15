@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"errors"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,15 +8,15 @@ import (
 )
 
 var (
-	ErrNotFound           = errors.New("Not Found")
-	ErrCouldNotCreateShop = errors.New("Could Not Create Shop")
-	ErrInvalidName        = errors.New("Invalid character or length (1~30)")
-	ErrInvalidDescription = errors.New("Invalid character of length (1~255)")
-	ErrInvalidAddress     = errors.New("Invalid Address. Please enter a proper address in Japanese")
-	ErrCouldNotUpdateShop = errors.New("Could Not Update Shop")
-	ErrInvalidJSON        = errors.New("Bad Request (invalid json)")
-	ErrNotAuthorized      = errors.New("Not Authorized")
-	ErrCouldNotDeleteShop = errors.New("Could Not Delete Shop")
+	ErrNotFound           = "Not Found"
+	ErrCouldNotCreateShop = "Could Not Create Shop"
+	ErrInvalidName        = "Invalid character or length (1~30)"
+	ErrInvalidDescription = "Invalid character of length (1~255)"
+	ErrInvalidAddress     = "Invalid Address. Please enter a proper address in Japanese"
+	ErrCouldNotUpdateShop = "Could Not Update Shop"
+	ErrInvalidJSON        = "Bad Request (invalid json)"
+	ErrNotAuthorized      = "Not Authorized"
+	ErrCouldNotDeleteShop = "Could Not Delete Shop"
 )
 
 type ShopController struct{}
@@ -29,8 +27,7 @@ func (i ShopController) Get(c *gin.Context) {
 	uid := c.Param("uid")
 	shop, err := shopModel.GetByID(uid)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrNotFound).SetType(gin.ErrorTypePublic).SetMeta(http.StatusNotFound)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, ErrNotFound})
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -39,25 +36,23 @@ func (i ShopController) Get(c *gin.Context) {
 func (i ShopController) Post(c *gin.Context) {
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
-		log.Println(err)
-		c.Error(ErrInvalidJSON).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidJSON})
 		return
 	}
 
 	// Nameのバリデーション
 	if match := NameRegexp.MatchString(shop.Name); match == false {
-		c.Error(ErrInvalidName).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidName})
 		return
 	}
 	// Descriptionのバリデーション
 	if match := DescriptionRegexp.MatchString(shop.Description); match == false {
-		c.Error(ErrInvalidDescription).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidDescription})
 		return
 	}
 	coordinate, err := AddressToCoordinate(shop.Address)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrInvalidAddress).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidAddress})
 		return
 	}
 	uid := getUID(c)
@@ -66,8 +61,7 @@ func (i ShopController) Post(c *gin.Context) {
 
 	returnedShop, err := shopModel.Create(shop, uid, latitude, longitude)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrCouldNotCreateShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusInternalServerError, ErrCouldNotCreateShop})
 		return
 	}
 	c.JSON(http.StatusOK, returnedShop)
@@ -77,39 +71,34 @@ func (i ShopController) Patch(c *gin.Context) {
 	uid := getUID(c)
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
-		log.Println(err)
-		c.Error(ErrInvalidJSON).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidJSON})
 		return
 	}
 
 	// Nameのバリデーション
-	if match := NameRegexp.MatchString(shop.Name); match != false {
-		c.Error(ErrInvalidName).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+	if match := NameRegexp.MatchString(shop.Name); match == false {
+		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidName})
 		return
 	}
 	// Descriptionのバリデーション
-	if match := DescriptionRegexp.MatchString(shop.Description); match != false {
-		c.Error(ErrInvalidDescription).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+	if match := DescriptionRegexp.MatchString(shop.Description); match == false {
+		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidDescription})
 		return
 	}
-	//if shop.Address != "" {
 	coordinate, err := AddressToCoordinate(shop.Address)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrInvalidAddress).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidAddress})
 		return
 	}
 	latitude := coordinate.Longitude
 	longitude := coordinate.Longitude
-	//}
 
-	shop, err = shopModel.Update(shop, uid, latitude, longitude)
+	returnedshop, err := shopModel.Update(shop, uid, latitude, longitude)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrCouldNotUpdateShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusInternalServerError, ErrCouldNotUpdateShop})
 		return
 	}
-	c.JSON(http.StatusOK, shop)
+	c.JSON(http.StatusOK, returnedshop)
 }
 
 func (i ShopController) Delete(c *gin.Context) {
@@ -117,8 +106,7 @@ func (i ShopController) Delete(c *gin.Context) {
 	var shop models.Shop
 	shop, err := shopModel.Delete(shop, uid)
 	if err != nil {
-		log.Println(err)
-		c.Error(ErrCouldNotDeleteShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusInternalServerError, ErrCouldNotDeleteShop})
 		return
 	}
 	c.JSON(http.StatusOK, shop)

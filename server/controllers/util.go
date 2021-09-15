@@ -14,6 +14,11 @@ var (
 	DescriptionRegexp = regexp.MustCompile(`[^£$§¡€¢§¶ªº«\\/]{1,255}`)
 )
 
+type APIError struct {
+	StatusCode   int
+	ErrorMessage string
+}
+
 func getUID(c *gin.Context) string {
 	token, _ := c.Get("token")
 	uid := token.(*auth.Token).UID
