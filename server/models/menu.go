@@ -19,8 +19,7 @@ type MenuModel struct{}
 
 func (m MenuModel) Create(shopUID string, menu Menu) (menuID int, err error) {
 	menu.ShopUID = shopUID
-	result := db.DB.Create(&menu)
-	err = result.Error
+	err = db.DB.Create(&menu).Error
 	return menu.ID, err
 }
 
