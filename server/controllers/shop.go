@@ -29,8 +29,8 @@ func (i ShopController) Get(c *gin.Context) {
 	uid := c.Param("uid")
 	shop, err := shopModel.GetByID(uid)
 	if err != nil {
-		c.JSON(http.StatusNotFound, ErrNotFound)
 		log.Println(err)
+		c.Error(ErrNotFound).SetType(gin.ErrorTypePublic).SetMeta(http.StatusNotFound)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -39,25 +39,25 @@ func (i ShopController) Get(c *gin.Context) {
 func (i ShopController) Post(c *gin.Context) {
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
-		c.JSON(http.StatusBadRequest, ErrInvalidJSON)
 		log.Println(err)
+		c.Error(ErrInvalidJSON).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 
 	// Nameのバリデーション
 	if match := NameRegexp.MatchString(shop.Name); match == false {
-		c.JSON(http.StatusBadRequest, ErrInvalidName)
+		c.Error(ErrInvalidName).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	// Descriptionのバリデーション
 	if match := DescriptionRegexp.MatchString(shop.Description); match == false {
-		c.JSON(http.StatusBadRequest, ErrInvalidDescription)
+		c.Error(ErrInvalidDescription).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	coordinate, err := AddressToCoordinate(shop.Address)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrInvalidAddress)
 		log.Println(err)
+		c.Error(ErrInvalidAddress).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	uid := getUID(c)
@@ -66,8 +66,8 @@ func (i ShopController) Post(c *gin.Context) {
 
 	returnedShop, err := shopModel.Create(shop, uid, latitude, longitude)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrCouldNotCreateShop)
 		log.Println(err)
+		c.Error(ErrCouldNotCreateShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
 		return
 	}
 	c.JSON(http.StatusOK, returnedShop)
@@ -77,26 +77,26 @@ func (i ShopController) Patch(c *gin.Context) {
 	uid := getUID(c)
 	var shop models.Shop
 	if err := c.BindJSON(&shop); err != nil {
-		c.JSON(http.StatusBadRequest, ErrInvalidJSON)
 		log.Println(err)
+		c.Error(ErrInvalidJSON).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 
 	// Nameのバリデーション
 	if match := NameRegexp.MatchString(shop.Name); match != false {
-		c.JSON(http.StatusBadRequest, ErrInvalidName)
+		c.Error(ErrInvalidName).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	// Descriptionのバリデーション
 	if match := DescriptionRegexp.MatchString(shop.Description); match != false {
-		c.JSON(http.StatusBadRequest, ErrInvalidDescription)
+		c.Error(ErrInvalidDescription).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	//if shop.Address != "" {
 	coordinate, err := AddressToCoordinate(shop.Address)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrInvalidAddress)
 		log.Println(err)
+		c.Error(ErrInvalidAddress).SetType(gin.ErrorTypePublic).SetMeta(http.StatusBadRequest)
 		return
 	}
 	latitude := coordinate.Longitude
@@ -105,8 +105,8 @@ func (i ShopController) Patch(c *gin.Context) {
 
 	shop, err = shopModel.Update(shop, uid, latitude, longitude)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrCouldNotUpdateShop)
 		log.Println(err)
+		c.Error(ErrCouldNotUpdateShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
@@ -117,8 +117,8 @@ func (i ShopController) Delete(c *gin.Context) {
 	var shop models.Shop
 	shop, err := shopModel.Delete(shop, uid)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrCouldNotDeleteShop)
 		log.Println(err)
+		c.Error(ErrCouldNotDeleteShop).SetType(gin.ErrorTypePublic).SetMeta(http.StatusInternalServerError)
 		return
 	}
 	c.JSON(http.StatusOK, shop)
