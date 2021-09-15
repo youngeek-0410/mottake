@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/youngeek-0410/mottake/server/db"
-	"gorm.io/gorm"
 )
 
 type Shop struct {
@@ -40,21 +39,13 @@ func (r ShopModel) Create(shop Shop, uid string, latitude float32, longitude flo
 }
 
 func (r ShopModel) Update(shop Shop, uid string, latitude float32, longitude float32) (Shop, error) {
-	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		// uidのバリデーション
-		var err error
-		_, err = r.GetByID(uid)
-		if err != nil {
-			return err
-		}
-		shop.UID = uid
-		shop.Latitude = latitude
-		shop.Longitude = longitude
-		if err := db.DB.Updates(&shop).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	shop.UID = uid
+	shop.Latitude = latitude
+	shop.Longitude = longitude
+	if err := db.DB.Updates(&shop).Error; err != nil {
+		return shop, err
+	}
+	shop, err := r.GetByID(uid)
 	if err != nil {
 		return shop, err
 	}
@@ -62,19 +53,7 @@ func (r ShopModel) Update(shop Shop, uid string, latitude float32, longitude flo
 }
 
 func (r ShopModel) Delete(shop Shop, uid string) (Shop, error) {
-	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		// uidのバリデーション
-		var err error
-		shop, err = r.GetByID(uid)
-		if err != nil {
-			return err
-		}
-		if err := db.DB.Delete(&shop).Error; err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
+	if err := db.DB.Delete(&shop).Error; err != nil {
 		return shop, err
 	}
 	return shop, nil

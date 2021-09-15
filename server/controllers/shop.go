@@ -76,12 +76,12 @@ func (i ShopController) Update(c *gin.Context) {
 	}
 
 	// Nameのバリデーション
-	if match := NameRegexp.MatchString(shop.Name); match == false {
+	if shop.Name != "" && NameRegexp.MatchString(shop.Name) == false {
 		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidName})
 		return
 	}
 	// Descriptionのバリデーション
-	if match := DescriptionRegexp.MatchString(shop.Description); match == false {
+	if shop.Name != "" && DescriptionRegexp.MatchString(shop.Description) == false {
 		c.Error(nil).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidDescription})
 		return
 	}
