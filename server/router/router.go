@@ -28,6 +28,10 @@ func NewRouter() *gin.Engine {
 	search := new(controllers.SearchController)
 	r.GET("/shop/search", search.Get)
 
+	receipt := new(controllers.ReceiptController)
+	r.GET("/user/receipt", receipt.All)
+	r.POST("/management/shop/receipt", receipt.Create)
+
 	return r
 
 }

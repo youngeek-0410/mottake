@@ -4,6 +4,7 @@ import "github.com/youngeek-0410/mottake/server/db"
 
 func Init() {
 	db.DB.AutoMigrate(&Customer{}, &Shop{}, &Genre{}, &FavoriteGenre{}, &RelatedGenre{}, &Receipt{}, &Purchase{}, &Menu{})
+
 }
 
 func InitGenres() {
@@ -49,4 +50,5 @@ func InitGenres() {
 		{ID: 40, Name: "酒類"},
 	}
 	db.DB.Save(&genres)
+
 }
