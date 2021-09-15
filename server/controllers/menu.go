@@ -27,8 +27,7 @@ var menuModel = new(models.MenuModel)
 func (m MenuController) Create(c *gin.Context) {
 	var menu models.Menu
 	uid := getUID(c)
-	err := json.NewDecoder(c.Request.Body).Decode(&menu)
-	if err != nil {
+	if err := c.ShouldBindJSON(&menu); err != nil {
 		_ = c.Error(ErrInvalidJSONRequest).SetType(gin.ErrorTypePublic)
 		return
 	}

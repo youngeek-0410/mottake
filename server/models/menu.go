@@ -8,8 +8,8 @@ import (
 type Menu struct {
 	ID        int                   `json:"id" gorm:"primaryKey"`
 	ShopUID   string                `json:"shop_uid" gorm:"uniqueIndex:unique_menu"`
-	Name      string                `json:"name" gorm:"uniqueIndex:unique_menu"`
-	Price     int                   `json:"price"`
+	Name      string                `json:"name" gorm:"uniqueIndex:unique_menu" binding:"required"`
+	Price     int                   `json:"price" binding:"required"`
 	Image     string                `json:"image"`
 	Purchases []Purchase            `json:"purchases,omitempty"`
 	DeletedAt soft_delete.DeletedAt `json:"deleted_at" gorm:"uniqueIndex:unique_menu"`
