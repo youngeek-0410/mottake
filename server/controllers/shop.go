@@ -92,7 +92,7 @@ func (i ShopController) Update(c *gin.Context) {
 		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, ErrInvalidAddress})
 		return
 	}
-	latitude := coordinate.Longitude
+	latitude := coordinate.Latitude
 	longitude := coordinate.Longitude
 
 	returnedshop, err := shopModel.Update(shop, uid, latitude, longitude)
