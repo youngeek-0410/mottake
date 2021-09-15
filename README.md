@@ -18,6 +18,7 @@
     name: mottake
     host: db
    firebase_secret: "/go/src/app/firebase-secret.json"
+   firebase_bucket: "バケットのパス"
    mode: DEVELOP
    port: :80
    ```
