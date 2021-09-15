@@ -13,11 +13,12 @@ type ServerConfig struct {
 		Name     string
 		Password string
 	} `mapstructure:"db_config"`
-	StorageBucket  string `mapstructure:"storage_bucket"`
 	FirebaseSecret string `mapstructure:"firebase_secret"`
 	FirebaseBucket string `mapstructure:"firebase_bucket"`
 	Mode           string
 	Port           string
+	GeocoderClientID string `mapstructure:"geocoder_client_id"`
+
 }
 
 const (
