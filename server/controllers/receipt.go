@@ -15,7 +15,7 @@ func (r ReceiptController) All(c *gin.Context) {
 	uid := getUID(c)
 	receipts, err := receiptModel.All(uid)
 	if err != nil {
-		_ = c.Error(errCouldNotQueryReceipts).SetType(gin.ErrorTypePublic)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errCouldNotQueryReceipts})
 		return
 	}
 	c.JSON(http.StatusOK, receipts)
@@ -26,13 +26,13 @@ func (r ReceiptController) Create(c *gin.Context) {
 	shopUID := getUID(c)
 
 	if err := c.ShouldBindJSON(&receipt); err != nil {
-		_ = c.Error(errInvalidJSONRequest).SetType(gin.ErrorTypePublic)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, errInvalidJSONRequest})
 		return
 	}
 
 	receiptID, err := receiptModel.Create(receipt, shopUID)
 	if err != nil {
-		_ = c.Error(errCouldNotCreateReceipt).SetType(gin.ErrorTypePublic)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusInternalServerError, errCouldNotCreateReceipt})
 		return
 	}
 	receipt, _ = receiptModel.GetOneByID(receiptID, receipt.CustomerUID)
