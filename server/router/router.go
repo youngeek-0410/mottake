@@ -50,5 +50,11 @@ func NewRouter() *gin.Engine {
 
 	genre := new(controllers.GenreController)
 	r.GET("/genre", genre.GetAll)
+
+	customer := new(controllers.CustomerController)
+	r.GET("/user", customer.Show)
+	r.POST("/user", customer.Create)
+	r.PATCH("/user", customer.Update)
+	r.DELETE("/user", customer.Destroy)
 	return r
 }

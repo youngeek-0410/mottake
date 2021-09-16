@@ -35,6 +35,10 @@ var (
 	errCouldNotDeleteShop = "Could Not Delete Shop"
 
 	errCouldNotUpdateGenre = "Could Not Update Genre"
+
+	errCouldNotCreateCustomer = "Could Not Create Customer"
+	errCouldNotUpdateCustomer = "Could Not Update Customer"
+	errCouldNotDeleteCustomer = "Could Not Delete Customer"
 )
 
 type APIError struct {
