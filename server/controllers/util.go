@@ -12,6 +12,26 @@ import (
 var (
 	NameRegexp        = regexp.MustCompile(`[^£$§¡€¢§¶ªº«\\/]{1,30}`)
 	DescriptionRegexp = regexp.MustCompile(`[^£$§¡€¢§¶ªº«\\/]{1,255}`)
+
+	errInvalidJSONRequest = "invalid json request"
+	errCouldNotCreateMenu = "could not create menu"
+	errCouldNotGetMenus   = "could not get menus"
+	errCouldNotGetMenu    = "could not get menu"
+	errInvalidMenuID      = "invalid menu_id"
+	errCouldNotDeleteMenu = "could not delete menu"
+	errCouldNotUpdateMenu = "could not update menu"
+
+	errCouldNotCreateReceipt = "could not create receipt"
+	errCouldNotQueryReceipts = "could not query receipts"
+
+	errNotFound           = "Not Found"
+	errCouldNotCreateShop = "Could Not Create Shop"
+	errInvalidName        = "Invalid character or length (1~30)"
+	errInvalidDescription = "Invalid character of length (1~255)"
+	errInvalidAddress     = "Invalid Address. Please enter a proper address in Japanese"
+	errCouldNotUpdateShop = "Could Not Update Shop"
+	errNotAuthorized      = "Not Authorized"
+	errCouldNotDeleteShop = "Could Not Delete Shop"
 )
 
 type APIError struct {

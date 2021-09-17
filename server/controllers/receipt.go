@@ -1,17 +1,10 @@
 package controllers
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/youngeek-0410/mottake/server/models"
-)
-
-var (
-	ErrInvalidJSONRequest    = errors.New("invalid json request")
-	ErrCouldNotCreateReceipt = errors.New("could not create receipt")
-	ErrCouldNotQueryReceipts = errors.New("could not query receipts")
 )
 
 type ReceiptController struct{}
@@ -22,7 +15,7 @@ func (r ReceiptController) All(c *gin.Context) {
 	uid := getUID(c)
 	receipts, err := receiptModel.All(uid)
 	if err != nil {
-		_ = c.Error(ErrCouldNotQueryReceipts).SetType(gin.ErrorTypePublic)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errCouldNotQueryReceipts})
 		return
 	}
 	c.JSON(http.StatusOK, receipts)
@@ -32,14 +25,14 @@ func (r ReceiptController) Create(c *gin.Context) {
 	var receipt models.Receipt
 	shopUID := getUID(c)
 
-	if err := c.ShouldBindJSON(&receipt);err != nil{
-		_ = c.Error(ErrInvalidJSONRequest).SetType(gin.ErrorTypePublic)
+	if err := c.ShouldBindJSON(&receipt); err != nil {
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusBadRequest, errInvalidJSONRequest})
 		return
 	}
 
 	receiptID, err := receiptModel.Create(receipt, shopUID)
 	if err != nil {
-		_ = c.Error(ErrCouldNotCreateReceipt).SetType(gin.ErrorTypePublic)
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusInternalServerError, errCouldNotCreateReceipt})
 		return
 	}
 	receipt, _ = receiptModel.GetOneByID(receiptID, receipt.CustomerUID)
