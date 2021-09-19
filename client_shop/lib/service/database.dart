@@ -52,7 +52,7 @@ class Database {
       final header = await getHeader();
       final response = await http.patch(Uri.parse(url),
           body: jsonEncode(menu.toJson()), headers: header);
-      if (response.statusCode != 200) {
+      if (response.statusCode != 204) {
         throw APIException(response.body);
       }
     } catch (e) {
