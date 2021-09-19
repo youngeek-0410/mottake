@@ -9,8 +9,8 @@ class LoginPage extends ConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final authService = watch(authServiceProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authService = ref.watch(authServiceProvider);
     return Scaffold(
       body: Center(
           child: Column(

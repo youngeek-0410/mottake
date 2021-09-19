@@ -4,6 +4,7 @@ import 'package:client_shop/app/home/shop/shop_page.dart';
 import 'package:client_shop/constants/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TabInfo {
   String label;

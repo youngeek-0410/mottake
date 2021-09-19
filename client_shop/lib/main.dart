@@ -28,8 +28,8 @@ class Locator extends ConsumerWidget {
   const Locator({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    return watch(authStateProvider).when(data: (data) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(authStateProvider).when(data: (data) {
       if (data.authFlowStatus == AuthFlowStatus.googleSignIn) {
         return LoginPage();
       } else if (data.authFlowStatus == AuthFlowStatus.register) {

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _shopNameController = TextEditingController();
   final _shopDescriptionController = TextEditingController();
   final _shopAddressController = TextEditingController();
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
         // Sign Up Button
         ElevatedButton(
           onPressed: () {
-            _register(context);
+            _register();
           },
           child: const Text("Register"),
         )
@@ -67,12 +67,12 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _register(BuildContext context) {
+  void _register() {
     final name = _shopNameController.text.trim();
     final description = _shopDescriptionController.text.trim();
     final address = _shopAddressController.text.trim();
     final salesGoal = int.parse(_shopSalesGoalController.text.trim());
-    final auth = context.read(authServiceProvider);
+    final auth = ref.read(authServiceProvider);
     auth.register(name, description, address, salesGoal);
   }
 }

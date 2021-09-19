@@ -11,9 +11,9 @@ class ShopPage extends ConsumerWidget {
   const ShopPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final auth = watch(authServiceProvider);
-    final _shopProvider = watch(shopProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authServiceProvider);
+    final _shopProvider = ref.watch(shopProvider);
     return Scaffold(
         body: Center(
             child: Column(
