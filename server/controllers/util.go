@@ -32,6 +32,8 @@ var (
 	errCouldNotUpdateShop = "Could Not Update Shop"
 	errNotAuthorized      = "Not Authorized"
 	errCouldNotDeleteShop = "Could Not Delete Shop"
+
+	errCouldNotUpdateGenre = "Could Not Update Genre"
 )
 
 type APIError struct {
