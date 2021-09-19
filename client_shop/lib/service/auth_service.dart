@@ -78,8 +78,9 @@ class AuthService {
         headers: header, body: jsonEncode(body));
     if (response.statusCode != 200) {
       setRegister();
+    } else {
+      setSession();
     }
-    setSession();
   }
 
   void setGoogleSignIn() {
