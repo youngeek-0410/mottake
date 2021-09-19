@@ -7,8 +7,6 @@ import (
 type Genre struct {
 	ID   int    `json:"id" gorm:"primaryKey"`
 	Name string `json:"name"`
-	//	FavoriteGenres []FavoriteGenre
-	//	RelatedGenres []RelatedGenre `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type FavoriteGenre struct {

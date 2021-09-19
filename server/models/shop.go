@@ -14,7 +14,7 @@ type Shop struct {
 	SalesGoal    int          `json:"sales_goal"`
 	Sales        int          `json:"sales"`
 	Description  string       `json:"description"`
-	Menus        []Menu       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Menus        []Menu       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	RelatedGenre RelatedGenre `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
