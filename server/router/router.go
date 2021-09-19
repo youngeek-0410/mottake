@@ -47,5 +47,8 @@ func NewRouter() *gin.Engine {
 	relatedGenre := new(controllers.RelatedGenreController)
 	r.GET("/shop/:uid/genre", relatedGenre.GetByID)
 	r.PUT("/shop/genre", relatedGenre.Save)
+
+	genre := new(controllers.GenreController)
+	r.GET("/genre", genre.GetAll)
 	return r
 }

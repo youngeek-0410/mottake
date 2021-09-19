@@ -68,3 +68,16 @@ func (i RelatedGenreController) Save(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, returnedGenre)
 }
+
+type GenreController struct{}
+
+var GenreModel = new(models.GenreModel)
+
+func (i GenreController) GetAll(c *gin.Context) {
+	genre, err := GenreModel.GetAll()
+	if err != nil {
+		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errNotFound})
+		return
+	}
+	c.JSON(http.StatusOK, genre)
+}

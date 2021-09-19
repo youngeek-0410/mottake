@@ -54,3 +54,13 @@ func (r RelatedGenreModel) Save(genre RelatedGenre) (RelatedGenre, error) {
 	}
 	return genre, nil
 }
+
+type GenreModel struct{}
+
+func (r GenreModel) GetAll() ([]Genre, error) {
+	var genre []Genre
+	if err := db.DB.Find(&genre).Error; err != nil {
+		return genre, err
+	}
+	return genre, nil
+}
