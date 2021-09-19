@@ -43,7 +43,7 @@ type RelatedGenreController struct{}
 var relatedGenreModel = new(models.RelatedGenreModel)
 
 func (i RelatedGenreController) GetByID(c *gin.Context) {
-	uid := getUID(c)
+	uid := c.Param("uid")
 	genre, err := relatedGenreModel.GetByID(uid)
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errNotFound})
