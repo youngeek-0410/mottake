@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"regexp"
 
 	"firebase.google.com/go/v4/auth"
@@ -58,6 +59,9 @@ func AddressToCoordinate(address string) (geocoder.Coordinate, error) {
 	response, err := client.Search(geocoder.RequestParam{"query": address})
 	if err != nil {
 		return init, err
+	}
+	if response.ResultInfo.Count <= 0 {
+		return init, errors.New("Result infomation is zero.")
 	}
 	result := response.Feature[0]
 	return result.Geometry.Coordinates.ToCoordinate(), nil
