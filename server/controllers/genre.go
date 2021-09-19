@@ -12,7 +12,7 @@ type FavoriteGenreController struct{}
 var favoriteGenreModel = new(models.FavoriteGenreModel)
 
 func (i FavoriteGenreController) GetByID(c *gin.Context) {
-	uid := c.Param("uid")
+	uid := getUID(c)
 	genre, err := favoriteGenreModel.GetByID(uid)
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errNotFound})
@@ -43,7 +43,7 @@ type RelatedGenreController struct{}
 var relatedGenreModel = new(models.RelatedGenreModel)
 
 func (i RelatedGenreController) GetByID(c *gin.Context) {
-	uid := c.Param("uid")
+	uid := getUID(c)
 	genre, err := relatedGenreModel.GetByID(uid)
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic).SetMeta(APIError{http.StatusNotFound, errNotFound})

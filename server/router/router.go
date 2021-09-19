@@ -41,11 +41,11 @@ func NewRouter() *gin.Engine {
 	r.POST("/management/shop/receipt", receipt.Create)
 
 	favoriteGenre := new(controllers.FavoriteGenreController)
-	r.GET("/user/:uid/genre", favoriteGenre.GetByID)
+	r.GET("/user/genre", favoriteGenre.GetByID)
 	r.PUT("/user/genre", favoriteGenre.Save)
 
 	relatedGenre := new(controllers.RelatedGenreController)
-	r.GET("/shop/:uid/genre", relatedGenre.GetByID)
+	r.GET("/shop/genre", relatedGenre.GetByID)
 	r.PUT("/shop/genre", relatedGenre.Save)
 
 	genre := new(controllers.GenreController)
