@@ -1,3 +1,4 @@
+import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/manu.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,11 +41,19 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
 
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
-      final database = ref.read(databaseProvider)!;
-      database
-          .createMenu(Menu(name: _name, price: _price))
-          .then((_) => Navigator.of(context).pop())
-          .catchError((_) => Navigator.of(context).pop());
+      try {
+        final database = ref.read(databaseProvider)!;
+        await database.createMenu(Menu(name: _name, price: _price));
+        Navigator.of(context).pop();
+      } catch (e) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return errorDialog("Failed to create menu.", () {
+                Navigator.of(context).pop();
+              });
+            });
+      }
     }
   }
 

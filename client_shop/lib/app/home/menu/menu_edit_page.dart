@@ -1,3 +1,4 @@
+import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/manu.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
@@ -59,20 +60,36 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
   }
 
   Future<void> _delete() async {
-    final database = ref.read(databaseProvider)!;
-    database
-        .deleteMenu(_id!)
-        .then((_) => Navigator.of(context).pop())
-        .catchError((_) => Navigator.of(context).pop());
+    try {
+      final database = ref.read(databaseProvider)!;
+      await database.deleteMenu(_id!);
+      Navigator.of(context).pop();
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return errorDialog("Failed to delete menu.", () {
+              Navigator.of(context).pop();
+            });
+          });
+    }
   }
 
   Future<void> _submit() async {
     if (_validateAndSaveForm()) {
-      final database = ref.read(databaseProvider)!;
-      database
-          .patchMenu(Menu(id: _id, name: _name, price: _price))
-          .then((_) => Navigator.of(context).pop())
-          .catchError((_) => Navigator.of(context).pop());
+      try {
+        final database = ref.read(databaseProvider)!;
+        await database.patchMenu(Menu(id: _id, name: _name, price: _price));
+        Navigator.of(context).pop();
+      } catch (e) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return errorDialog("Failed to refresh the menu.", () {
+                Navigator.of(context).pop();
+              });
+            });
+      }
     }
   }
 
