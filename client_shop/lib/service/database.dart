@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:client_shop/app/config/exceptions.dart';
-import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/home/models/receipt.dart';
 import 'package:client_shop/app/home/models/shop.dart';
 import 'package:client_shop/constants/urls.dart';
@@ -94,7 +94,7 @@ class Database {
       final header = await getHeader();
       final response = await http.post(Uri.parse(url),
           body: jsonEncode(menu.toJson()), headers: header);
-      if (response.statusCode != 201) {
+      if (response.statusCode != 200) {
         throw APIException(response.body);
       }
     } catch (e) {
