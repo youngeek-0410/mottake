@@ -1,8 +1,12 @@
-class FetchException implements Exception {
+class CustomException implements Exception {
   final String message;
-  FetchException(this.message);
+  CustomException(this.message);
   @override
   String toString() {
     return message;
   }
+}
+
+class APIException extends CustomException {
+  APIException(String message) : super(message);
 }
