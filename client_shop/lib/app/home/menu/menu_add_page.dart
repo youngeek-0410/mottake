@@ -86,9 +86,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
         ),
         validator: (value) {
           final parsed = int.tryParse(value ?? '') ?? 0;
-          return parsed > 0
-              ? null
-              : 'Price must be greater than or equal to 0 yen';
+          return parsed > 0 ? null : 'Price must be greater than 0 yen';
         },
         onSaved: (value) => _price = int.tryParse(value ?? '') ?? 0,
       ),
