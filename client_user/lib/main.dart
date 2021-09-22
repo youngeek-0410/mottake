@@ -1,4 +1,8 @@
-import 'package:client_user/wrapper.dart';
+import 'package:client_user/app/home/home_page.dart';
+import 'package:client_user/app/login/login_page.dart';
+import 'package:client_user/app/providers.dart';
+import 'package:client_user/app/register/register_page.dart';
+import 'package:client_user/service/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,14 +10,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ProviderScope(child: RootWidget()));
+  runApp(const ProviderScope(child: App()));
 }
 
-class RootWidget extends StatelessWidget {
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: App(),
+    return const MaterialApp(
+      home: Locator(),
     );
+  }
+}
+
+class Locator extends ConsumerWidget {
+  const Locator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(authStateProvider).when(data: (data) {
+      if (data.authFlowStatus == AuthFlowStatus.googleSignIn) {
+        return LoginPage();
+      } else if (data.authFlowStatus == AuthFlowStatus.register) {
+        return RegisterPage();
+      } else {
+        return HomePage();
+      }
+    }, loading: () {
+      return const CircularProgressIndicator();
+    }, error: (error, stackTrace) {
+      return LoginPage();
+    });
   }
 }

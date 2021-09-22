@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(client_user LANGUAGES CXX)
+project(client_shop LANGUAGES CXX)
 
-set(BINARY_NAME "client_user")
+set(BINARY_NAME "client_shop")
 
 cmake_policy(SET CMP0063 NEW)
 
