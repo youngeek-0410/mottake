@@ -21,12 +21,25 @@ class Database {
       final header = await getHeader();
       final response = await http.get(Uri.parse(url), headers: header);
       if (response.statusCode != 200) {
-        throw FetchException(response.body.toString());
+        throw APIException(response.body.toString());
       }
       final customer = Customer.fromJson(jsonDecode(response.body));
       return customer;
     } catch (e) {
-      throw FetchException(e.toString());
+      throw APIException(e.toString());
+    }
+  }
+
+  Future<void> deleteCustomer() async {
+    try {
+      final url = URLs.baseURL + "/user";
+      final header = await getHeader();
+      final response = await http.delete(Uri.parse(url), headers: header);
+      if (response.statusCode != 204) {
+        throw APIException(response.body);
+      }
+    } catch (e) {
+      throw APIException(e.toString());
     }
   }
 }

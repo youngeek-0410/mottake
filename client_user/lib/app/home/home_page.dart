@@ -14,7 +14,7 @@ class TabInfo {
 
 class HomePage extends StatelessWidget {
   final List<TabInfo> _tabs = [
-    TabInfo("user", CustomerPage()),
+    TabInfo("user", CustomerDeletePage()),
     TabInfo(Strings.camera, CameraPage()),
     TabInfo(Strings.menu, MenuPage()),
   ];
