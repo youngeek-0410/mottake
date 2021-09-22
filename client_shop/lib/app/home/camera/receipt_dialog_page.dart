@@ -1,5 +1,5 @@
 import 'package:client_shop/app/home/common_widget.dart';
-import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/home/models/receipt.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:flutter/material.dart';
