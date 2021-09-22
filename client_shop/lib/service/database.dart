@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:client_shop/app/config/exceptions.dart';
 import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/receipt.dart';
 import 'package:client_shop/app/home/models/shop.dart';
 import 'package:client_shop/constants/urls.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,6 +81,34 @@ class Database {
       final header = await getHeader();
       final response = await http.delete(Uri.parse(url), headers: header);
       if (response.statusCode != 204) {
+        throw APIException(response.body);
+      }
+    } catch (e) {
+      throw APIException(e.toString());
+    }
+  }
+
+  Future<Menu> getMenu(int id) async {
+    try {
+      final url = URLs.baseURL + "/shop/" + user.uid + "/menu/" + id.toString();
+      final header = await getHeader();
+      final response = await http.get(Uri.parse(url), headers: header);
+      if (response.statusCode != 200) {
+        throw APIException(response.body);
+      }
+      return Menu.fromJson(jsonDecode(response.body));
+    } catch (e) {
+      throw APIException(e.toString());
+    }
+  }
+
+  Future<void> registerReceipt(Receipt receipt) async {
+    try {
+      final url = URLs.baseURL + "/management/shop/receipt";
+      final header = await getHeader();
+      final response = await http.post(Uri.parse(url),
+          headers: header, body: jsonEncode(receipt.toJson()));
+      if (response.statusCode != 201) {
         throw APIException(response.body);
       }
     } catch (e) {
