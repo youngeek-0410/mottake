@@ -20,12 +20,14 @@ func NewRouter() *gin.Engine {
 
 	index := new(controllers.IndexController)
 	r.GET("/", index.Get)
+
 	menu := new(controllers.MenuController)
 	r.GET("/shop/:uid/menu", menu.All)
 	r.GET("/shop/:uid/menu/:menuID", menu.One)
 	r.POST("/management/shop/menu", menu.Create)
 	r.PATCH("/management/shop/menu/:menuID", menu.Update)
 	r.DELETE("/management/shop/menu/:menuID", menu.Delete)
+
 	shop := new(controllers.ShopController)
 	r.GET("/shop/:uid", shop.GetByID)
 	r.POST("/management/shop", shop.Create)
@@ -38,6 +40,21 @@ func NewRouter() *gin.Engine {
 	r.GET("/user/receipt", receipt.All)
 	r.POST("/management/shop/receipt", receipt.Create)
 
-	return r
+	favoriteGenre := new(controllers.FavoriteGenreController)
+	r.GET("/user/genre", favoriteGenre.GetByID)
+	r.PUT("/user/genre", favoriteGenre.Save)
 
+	relatedGenre := new(controllers.RelatedGenreController)
+	r.GET("/shop/:uid/genre", relatedGenre.GetByID)
+	r.PUT("/management/shop/genre", relatedGenre.Save)
+
+	genre := new(controllers.GenreController)
+	r.GET("/genre", genre.GetAll)
+
+	customer := new(controllers.CustomerController)
+	r.GET("/user", customer.Show)
+	r.POST("/user", customer.Create)
+	r.PATCH("/user", customer.Update)
+	r.DELETE("/user", customer.Destroy)
+	return r
 }
