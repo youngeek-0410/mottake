@@ -37,30 +37,30 @@ class _CustomerDeletePageState extends ConsumerState<CustomerDeletePage> {
         child: const Text("Sign out"),
         onPressed: auth.signOut,
       ),
-      ElevatedButton(
-          child: const Text("Delete User"),
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text("警告"),
-                    content: Text("本当にユーザを削除しますか？この作業は取り消せません。"),
-                    actions: <Widget>[
-                      // ボタン領域
-                      FlatButton(
-                        child: Text("Cancel"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      FlatButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            _submit();
-                          }),
-                    ],
-                  );
-                });
-          })
+      // ElevatedButton(
+      //     child: const Text("Delete User"),
+      //     onPressed: () {
+      //       showDialog(
+      //           context: context,
+      //           builder: (_) {
+      //             return AlertDialog(
+      //               title: Text("警告"),
+      //               content: Text("本当にユーザを削除しますか？この作業は取り消せません。"),
+      //               actions: <Widget>[
+      //                 // ボタン領域
+      //                 FlatButton(
+      //                   child: Text("Cancel"),
+      //                   onPressed: () => Navigator.pop(context),
+      //                 ),
+      //                 FlatButton(
+      //                     child: Text("OK"),
+      //                     onPressed: () {
+      //                       _submit();
+      //                     }),
+      //               ],
+      //             );
+      //           });
+      //     })
     ])));
   }
 

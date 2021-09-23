@@ -1,5 +1,5 @@
-import 'package:client_user/app/home/camera/camera_page.dart';
-import 'package:client_user/app/home/menu/menu_page.dart';
+import 'package:client_user/app/home/map/map_page.dart';
+import 'package:client_user/app/home/purchase/purchase_page.dart';
 import 'package:client_user/app/home/customer/customer_page.dart';
 import 'package:client_user/constants/strings.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,8 +15,8 @@ class TabInfo {
 class HomePage extends StatelessWidget {
   final List<TabInfo> _tabs = [
     TabInfo("user", CustomerDeletePage()),
-    TabInfo(Strings.camera, CameraPage()),
-    TabInfo(Strings.menu, MenuPage()),
+    TabInfo("map", MapPage()),
+    TabInfo("purchase", PurchasePage()),
   ];
 
   HomePage({Key? key}) : super(key: key);
