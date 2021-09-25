@@ -37,6 +37,9 @@ class _CustomerDeletePageState extends ConsumerState<CustomerDeletePage> {
         child: const Text("Sign out"),
         onPressed: auth.signOut,
       ),
+      // --------------------------------------------
+      // DON'T REMOVE ↓ !!!!!!
+      //
       // ElevatedButton(
       //     child: const Text("Delete User"),
       //     onPressed: () {
@@ -61,6 +64,7 @@ class _CustomerDeletePageState extends ConsumerState<CustomerDeletePage> {
       //             );
       //           });
       //     })
+      // ---------------------------------------------
     ])));
   }
 

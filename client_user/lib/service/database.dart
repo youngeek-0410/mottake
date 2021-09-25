@@ -5,7 +5,9 @@ import 'package:client_user/app/home/models/customer.dart';
 import 'package:client_user/app/home/models/shop.dart';
 import 'package:client_user/constants/urls.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:client_user/app/home/map/map_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 
 class Database {
   Database({required this.user});
@@ -44,10 +46,13 @@ class Database {
     }
   }
 
-  Future<Shops?> searchShop() async {
+  Future<Shops?> searchShop(LocationData? location) async {
     try {
       final url = URLs.baseURL +
-          "/shop/search?latitude=35.0823860168457&longitude=130.15621948242188";
+          "/shop/search?latitude=" +
+          location!.latitude.toString() +
+          "&longitude=" +
+          location.longitude.toString();
       final header = await getHeader();
       final response = await http.get(Uri.parse(url), headers: header);
       print(response.body);

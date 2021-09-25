@@ -22,7 +22,6 @@ class MapPage extends StatelessWidget {
 void viewMap() {
   runApp(MaterialApp(
     home: Scaffold(
-      //appBar: AppBar(title: const Text('Flutter Google Maps')),
       body: ProviderScope(child: MapsDemo()),
     ),
   ));
@@ -33,111 +32,15 @@ class MapsDemo extends ConsumerStatefulWidget {
   MapsDemoState createState() => MapsDemoState();
 }
 
-// class MapsDemoState extends State<MapsDemo> {
-//   late GoogleMapController mapController;
-//   Location _locationService = Location();
-//   // 現在位置
-//   LocationData? _yourLocation;
-//   // 現在位置の監視状況
-//   StreamSubscription? _locationChangedListen;
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     // 現在位置の取得
-//     _getLocation();
-
-//     // 現在位置の変化を監視
-//     _locationChangedListen =
-//         _locationService.onLocationChanged.listen((LocationData result) async {
-//       setState(() {
-//         _yourLocation = result;
-//       });
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-
-//     // 監視を終了
-//     _locationChangedListen?.cancel();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // return Scaffold(
-//     //   if (_yourLocation == null) {
-//     //   // 現在位置が取れるまではローディング中
-//     //   return Center(
-//     //     child: CircularProgressIndicator(),
-//     //   );
-//     // } else {
-//     //   // ここを追加
-//     //   body: Container(
-//     //     height: MediaQuery.of(context).size.height,
-//     //     width: MediaQuery.of(context).size.width,
-//     //     child: GoogleMap(
-//     //         onMapCreated: _onMapCreated,
-//     //         myLocationEnabled: true,
-//     //         initialCameraPosition: CameraPosition(
-//     //           //target: LatLng(35.6580339, 139.7016358),
-//     //           target: LatLng(_yourLocation.latitude, _yourLocation.longitude),
-//     //           zoom: 17.0,
-//     //         )),
-//     //   ),
-//     // });
-//     return Scaffold(
-//       body: _makeGoogleMap(),
-//     );
-//   }
-
-//   Widget _makeGoogleMap() {
-//     if (_yourLocation == null) {
-//       // 現在位置が取れるまではローディング中
-//       return Center(
-//         child: CircularProgressIndicator(),
-//       );
-//     } else {
-//       // Google Map ウィジェットを返す
-//       return GoogleMap(
-//         // 初期表示される位置情報を現在位置から設定
-//         initialCameraPosition: CameraPosition(
-//           target: LatLng(_yourLocation.latitude, _yourLocation.longitude),
-//           zoom: 18.0,
-//         ),
-//         onMapCreated: (GoogleMapController controller) {
-//           _controller.complete(controller);
-//         },
-
-//         // 現在位置にアイコン（青い円形のやつ）を置く
-//         myLocationEnabled: true,
-//       );
-//     }
-//   }
-
-//   void _getLocation() async {
-//     _yourLocation = await _locationService.getLocation();
-//   }
-
-//   void _onMapCreated(GoogleMapController controller) {
-//     setState(() {
-//       mapController = controller;
-//       mapController.animateCamera(CameraUpdate.newCameraPosition(
-//         const CameraPosition(
-//           target: LatLng(35.6580339, 139.7016358),
-//           zoom: 17.0,
-//         ),
-//       ));
-//     });
-//   }
-// }
-
-final customerProvider = FutureProvider<Shops?>(
-  (ref) => ref.read(databaseProvider)!.searchShop(),
-);
+// final customerProvider = FutureProvider<Shops?>(
+//   (ref) => ref.read(databaseProvider)!.searchShop(_yourLocation),
+// );
 
 class MapsDemoState extends ConsumerState<MapsDemo> {
+  late FutureProvider<Shops?> customerProvider;
+  // final customerProvider = FutureProvider<Shops?>(
+  //   (ref) => ref.read(databaseProvider)!.searchShop(_yourLocation),
+  // );
   Completer<GoogleMapController> _controller = Completer();
   Location _locationService = Location();
 
@@ -154,6 +57,9 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
     // 現在位置の取得
     _getLocation();
 
+    customerProvider = FutureProvider<Shops?>(
+      (ref) => ref.read(databaseProvider)!.searchShop(_yourLocation),
+    );
     // 現在位置の変化を監視
     _locationChangedListen =
         _locationService.onLocationChanged.listen((LocationData result) async {
@@ -199,10 +105,12 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
                 return Marker(
                   markerId: MarkerId(shop.uid!),
                   position: LatLng(shop.latitude!, shop.longitude!),
-                  infoWindow: InfoWindow(title: shop.name),
-                  // onTap: () {
-                  //   _updateSelectedShop(shop);
-                  // });
+                  infoWindow: InfoWindow(
+                      title: shop.name,
+                      snippet: shop.description,
+                      onTap: () {
+                        print("a");
+                      }),
                 );
               }).toSet() ??
               {},
@@ -221,7 +129,6 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
           // 現在位置にアイコン（青い円形のやつ）を置く
           myLocationEnabled: true,
         );
-        ;
       }, loading: () {
         return const CircularProgressIndicator();
       }, error: (error, stackTrace) {
@@ -234,3 +141,9 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
     _yourLocation = await _locationService.getLocation();
   }
 }
+
+// TODO: 明日の朝やる
+// void displayShop() {
+//   Navigator.of(context).push(MaterialPageRoute(
+//       builder: (context) => ReceiptDialogPage(receipt: receipt, menus: menus)));
+// }
