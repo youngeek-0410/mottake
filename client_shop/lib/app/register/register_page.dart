@@ -12,10 +12,12 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
-  final _shopNameController = TextEditingController();
-  final _shopDescriptionController = TextEditingController();
-  final _shopAddressController = TextEditingController();
-  final _shopSalesGoalController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String _name = "";
+  String _description = "";
+  String _address = "";
+  int _salesGoal = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,53 +28,81 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget _registerForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Username TextField
-        TextField(
-          controller: _shopNameController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.store), labelText: 'ShopName'),
-        ),
-
-        // Email TextField
-        TextField(
-          controller: _shopDescriptionController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.note), labelText: 'ShopDescription'),
-        ),
-
-        // Password TextField
-        TextField(
-          controller: _shopAddressController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.sort_by_alpha), labelText: 'ShopAddress'),
-        ),
-
-        TextField(
-          controller: _shopSalesGoalController,
-          decoration: const InputDecoration(
-              icon: Icon(Icons.money), labelText: 'SalesGoal'),
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        ),
-
-        // Sign Up Button
-        ElevatedButton(
-          onPressed: () {
-            _register();
-          },
-          child: const Text("Register"),
-        )
-      ],
+      children: [_buildForm()],
     );
   }
 
   void _register() {
-    final name = _shopNameController.text.trim();
-    final description = _shopDescriptionController.text.trim();
-    final address = _shopAddressController.text.trim();
-    final salesGoal = int.parse(_shopSalesGoalController.text.trim());
-    final auth = ref.read(authServiceProvider);
-    auth.register(name, description, address, salesGoal);
+    if (_validateAndSaveForm()) {
+      ref
+          .read(authServiceProvider)
+          .register(_name, _description, _address, _salesGoal);
+    }
+  }
+
+  bool _validateAndSaveForm() {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  Widget _buildForm() {
+    return Form(
+      key: _formKey,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        ..._buildFormChildren(),
+        ElevatedButton(
+            onPressed: () {
+              _register();
+            },
+            child: const Text("Register")),
+      ]),
+    );
+  }
+
+  List<Widget> _buildFormChildren() {
+    return [
+      TextFormField(
+        decoration: const InputDecoration(labelText: 'Name'),
+        keyboardAppearance: Brightness.light,
+        initialValue: _name,
+        validator: (value) =>
+            (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _name = value!,
+      ),
+      TextFormField(
+        decoration: const InputDecoration(labelText: 'Description'),
+        keyboardAppearance: Brightness.light,
+        initialValue: _description,
+        validator: (value) =>
+            (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _description = value!,
+      ),
+      TextFormField(
+        decoration: const InputDecoration(labelText: 'Address'),
+        keyboardAppearance: Brightness.light,
+        initialValue: _address,
+        validator: (value) =>
+            (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',
+        onSaved: (value) => _address = value!,
+      ),
+      TextFormField(
+        decoration: const InputDecoration(labelText: 'Price'),
+        keyboardAppearance: Brightness.light,
+        initialValue: _salesGoal.toString(),
+        keyboardType: const TextInputType.numberWithOptions(
+          signed: false,
+          decimal: false,
+        ),
+        validator: (value) {
+          final parsed = int.tryParse(value ?? '') ?? 0;
+          return parsed > 0 ? null : 'Price must be greater than 0 yen';
+        },
+        onSaved: (value) => _salesGoal = int.tryParse(value ?? '') ?? 0,
+      ),
+    ];
   }
 }
