@@ -113,9 +113,13 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
         onSaved: (value) => _name = value,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Rate per hour'),
+        decoration: const InputDecoration(labelText: 'Price'),
         keyboardAppearance: Brightness.light,
         initialValue: _price.toString(),
+        validator: (value) {
+          final parsed = int.tryParse(value ?? '') ?? 0;
+          return parsed > 0 ? null : 'Price must be greater than 0 yen';
+        },
         keyboardType: const TextInputType.numberWithOptions(
           signed: false,
           decimal: false,
