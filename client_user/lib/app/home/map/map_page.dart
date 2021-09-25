@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
+import 'package:client_user/app/providers.dart';
+import 'package:client_user/app/home/models/shop.dart';
+import 'package:latlng/latlng.dart' as latLng;
 
 class MapPage extends StatelessWidget {
   const MapPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         body: Center(
-      child: ElevatedButton(child: const Text("地図を表示"), onPressed: viewMap),
+      child: MapsDemo(),
     ));
   }
 }
@@ -18,15 +22,15 @@ class MapPage extends StatelessWidget {
 void viewMap() {
   runApp(MaterialApp(
     home: Scaffold(
-      appBar: AppBar(title: const Text('Flutter Google Maps')),
-      body: MapsDemo(),
+      //appBar: AppBar(title: const Text('Flutter Google Maps')),
+      body: ProviderScope(child: MapsDemo()),
     ),
   ));
 }
 
-class MapsDemo extends StatefulWidget {
+class MapsDemo extends ConsumerStatefulWidget {
   @override
-  State createState() => MapsDemoState();
+  MapsDemoState createState() => MapsDemoState();
 }
 
 // class MapsDemoState extends State<MapsDemo> {
@@ -129,7 +133,11 @@ class MapsDemo extends StatefulWidget {
 //   }
 // }
 
-class MapsDemoState extends State<MapsDemo> {
+final customerProvider = FutureProvider<Shops?>(
+  (ref) => ref.read(databaseProvider)!.searchShop(),
+);
+
+class MapsDemoState extends ConsumerState<MapsDemo> {
   Completer<GoogleMapController> _controller = Completer();
   Location _locationService = Location();
 
@@ -166,7 +174,14 @@ class MapsDemoState extends State<MapsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _makeGoogleMap(),
+      body: Column(children: [
+        ElevatedButton(
+            onPressed: () {
+              ref.refresh(customerProvider);
+            },
+            child: const Text("Reload")),
+        Expanded(child: _makeGoogleMap())
+      ]),
     );
   }
 
@@ -177,20 +192,41 @@ class MapsDemoState extends State<MapsDemo> {
         child: CircularProgressIndicator(),
       );
     } else {
-      // Google Map ウィジェットを返す
-      return GoogleMap(
-        // 初期表示される位置情報を現在位置から設定
-        initialCameraPosition: CameraPosition(
-          target: LatLng(_yourLocation!.latitude!, _yourLocation!.longitude!),
-          zoom: 18.0,
-        ),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      final _customerProvider = ref.watch(customerProvider);
+      return _customerProvider.when(data: (data) {
+        return GoogleMap(
+          markers: data?.shops?.map((Shop shop) {
+                return Marker(
+                  markerId: MarkerId(shop.uid!),
+                  position: LatLng(shop.latitude!, shop.longitude!),
+                  infoWindow: InfoWindow(title: shop.name),
+                  // onTap: () {
+                  //   _updateSelectedShop(shop);
+                  // });
+                );
+              }).toSet() ??
+              {},
 
-        // 現在位置にアイコン（青い円形のやつ）を置く
-        myLocationEnabled: true,
-      );
+          // 初期表示される位置情報を現在位置から設定
+          initialCameraPosition: CameraPosition(
+            target: LatLng(_yourLocation!.latitude!, _yourLocation!.longitude!),
+            zoom: 18.0,
+          ),
+          onMapCreated: (GoogleMapController controller) {
+            if (!_controller.isCompleted) {
+              _controller.complete(controller);
+            }
+          },
+
+          // 現在位置にアイコン（青い円形のやつ）を置く
+          myLocationEnabled: true,
+        );
+        ;
+      }, loading: () {
+        return const CircularProgressIndicator();
+      }, error: (error, stackTrace) {
+        return const CircularProgressIndicator();
+      });
     }
   }
 

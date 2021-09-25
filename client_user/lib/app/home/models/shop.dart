@@ -1,4 +1,5 @@
 class Shop {
+  String? uid;
   String? name;
   String? address;
   String? description;
@@ -6,7 +7,8 @@ class Shop {
   double? latitude;
   double? longitude;
   Shop(
-      {this.name,
+      {this.uid,
+      this.name,
       this.address,
       this.description,
       this.salesGoal,
@@ -14,6 +16,7 @@ class Shop {
       this.longitude});
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
+      uid: json["uid"],
       name: json["name"],
       address: json["address"],
       description: json["description"],
@@ -29,4 +32,16 @@ class Shop {
         "latitude": latitude,
         "longitude": longitude
       };
+}
+
+class Shops {
+  List<Shop>? shops;
+
+  Shops(this.shops);
+
+  factory Shops.fromJson(List<dynamic> parsedJson) {
+    List<Shop> shops;
+    shops = parsedJson.map((e) => Shop.fromJson(e)).toList();
+    return Shops(shops);
+  }
 }

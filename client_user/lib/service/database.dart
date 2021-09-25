@@ -44,18 +44,22 @@ class Database {
     }
   }
 
-  Future<Shop> searchShop() async {
+  Future<Shops?> searchShop() async {
     try {
-      final url = URLs.baseURL + "/shop/search";
+      final url = URLs.baseURL +
+          "/shop/search?latitude=35.0823860168457&longitude=130.15621948242188";
       final header = await getHeader();
       final response = await http.get(Uri.parse(url), headers: header);
+      print(response.body);
       if (response.statusCode != 200) {
         throw APIException(response.body.toString());
       }
-      final shop = Shop.fromJson(jsonDecode(response.body));
+      final shop = Shops.fromJson(jsonDecode(response.body));
+      print(shop);
       return shop;
     } catch (e) {
-      throw APIException(e.toString());
+      //throw APIException(e.toString());
+      return null;
     }
   }
 }
