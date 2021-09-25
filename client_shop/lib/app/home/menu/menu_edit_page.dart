@@ -30,11 +30,15 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
   @override
   Widget build(BuildContext contex) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Menu Editing Page"),
-      ),
-      body: _buildForm(),
-    );
+        appBar: AppBar(
+          title: const Text("Menu Editing Page"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [_buildForm()],
+          ),
+        ));
   }
 
   Widget _buildForm() {

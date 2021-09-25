@@ -31,11 +31,15 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
   @override
   Widget build(BuildContext contex) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shop Editing Page"),
-      ),
-      body: _buildForm(),
-    );
+        appBar: AppBar(
+          title: const Text("Shop Editing Page"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [_buildForm()],
+          ),
+        ));
   }
 
   Widget _buildForm() {

@@ -26,9 +26,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   }
 
   Widget _registerForm() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [_buildForm()],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [_buildForm()],
+      ),
     );
   }
 
@@ -76,6 +79,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       TextFormField(
         decoration: const InputDecoration(labelText: 'Description'),
         keyboardAppearance: Brightness.light,
+        keyboardType: TextInputType.multiline,
+        minLines: 4,
+        maxLines: null,
         initialValue: _description,
         validator: (value) =>
             (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',

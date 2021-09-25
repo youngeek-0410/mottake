@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
           title: const Text(Strings.appNeme),
           bottom: PreferredSize(
             child: TabBar(
-              isScrollable: true,
+              isScrollable: false,
               tabs: _tabs.map((TabInfo tab) {
                 return Tab(text: tab.label);
               }).toList(),

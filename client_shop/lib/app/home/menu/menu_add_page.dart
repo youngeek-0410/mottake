@@ -18,11 +18,13 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Menu Creation Page")),
-      body: Column(
-        children: [_buildForm()],
-      ),
-    );
+        appBar: AppBar(title: const Text("Menu Creation Page")),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [_buildForm()],
+          ),
+        ));
   }
 
   Widget _buildForm() {
