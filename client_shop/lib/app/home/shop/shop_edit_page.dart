@@ -1,7 +1,6 @@
 import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/shop.dart';
 import 'package:client_shop/app/providers.dart';
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,32 +48,8 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
               _update();
             },
             child: const Text("Confirm")),
-        ElevatedButton(
-            onPressed: () async {
-              if (await confirm(context)) {
-                _delete();
-              }
-            },
-            child: const Text("Delete"),
-            style: ElevatedButton.styleFrom(primary: Colors.red)),
       ]),
     );
-  }
-
-  Future<void> _delete() async {
-    try {
-      final database = ref.read(databaseProvider)!;
-      await database.deleteShop();
-      ref.read(authServiceProvider).signOut();
-    } catch (e) {
-      showDialog(
-          context: context,
-          builder: (_) {
-            return errorDialog("Failed to delete shop.", () {
-              Navigator.of(context).pop();
-            });
-          });
-    }
   }
 
   Future<void> _update() async {
