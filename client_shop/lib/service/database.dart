@@ -46,19 +46,6 @@ class Database {
     }
   }
 
-  Future<void> deleteShop() async {
-    try {
-      final url = URLs.baseURL + "/management/shop";
-      final header = await getHeader();
-      final response = await http.delete(Uri.parse(url), headers: header);
-      if (response.statusCode != 200) {
-        throw APIException(response.body);
-      }
-    } catch (e) {
-      throw APIException(e.toString());
-    }
-  }
-
   Future<MenuList> getMenus() async {
     try {
       final url = URLs.baseURL + "/shop/" + user.uid + "/menu";
