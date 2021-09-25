@@ -1,5 +1,5 @@
 import 'package:client_shop/app/home/common_widget.dart';
-import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +18,13 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Menu Creation Page")),
-      body: Column(
-        children: [_buildForm()],
-      ),
-    );
+        appBar: AppBar(title: const Text("Menu Creation Page")),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [_buildForm()],
+          ),
+        ));
   }
 
   Widget _buildForm() {
@@ -86,9 +88,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
         ),
         validator: (value) {
           final parsed = int.tryParse(value ?? '') ?? 0;
-          return parsed > 0
-              ? null
-              : 'Price must be greater than or equal to 0 yen';
+          return parsed > 0 ? null : 'Price must be greater than 0 yen';
         },
         onSaved: (value) => _price = int.tryParse(value ?? '') ?? 0,
       ),

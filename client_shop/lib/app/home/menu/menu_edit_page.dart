@@ -1,5 +1,5 @@
 import 'package:client_shop/app/home/common_widget.dart';
-import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +30,15 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
   @override
   Widget build(BuildContext contex) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Menu Editing Page"),
-      ),
-      body: _buildForm(),
-    );
+        appBar: AppBar(
+          title: const Text("Menu Editing Page"),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [_buildForm()],
+          ),
+        ));
   }
 
   Widget _buildForm() {
@@ -113,9 +117,13 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
         onSaved: (value) => _name = value,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Rate per hour'),
+        decoration: const InputDecoration(labelText: 'Price'),
         keyboardAppearance: Brightness.light,
         initialValue: _price.toString(),
+        validator: (value) {
+          final parsed = int.tryParse(value ?? '') ?? 0;
+          return parsed > 0 ? null : 'Price must be greater than 0 yen';
+        },
         keyboardType: const TextInputType.numberWithOptions(
           signed: false,
           decimal: false,

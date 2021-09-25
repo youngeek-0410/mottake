@@ -1,5 +1,5 @@
 import 'package:client_shop/app/home/menu/menu_add_page.dart';
-import 'package:client_shop/app/home/models/manu.dart';
+import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,7 +59,7 @@ class MenuPage extends ConsumerWidget {
     return ListTile(
       title: Text(title),
       leading: icon,
-      trailing: Text(price.toString() + "円"),
+      trailing: Text(price.toString() + " yen"),
       onTap: () {
         onTap();
       },
