@@ -103,20 +103,15 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
         initialValue: _address,
         validator: (value) =>
             (value ?? '').isNotEmpty ? null : 'Name can\'t be empty',
-        keyboardType: const TextInputType.numberWithOptions(
-          signed: false,
-          decimal: false,
-        ),
         onSaved: (value) => _address = value!,
       ),
       TextFormField(
           decoration: const InputDecoration(labelText: 'Description'),
           keyboardAppearance: Brightness.light,
           initialValue: _description,
-          keyboardType: const TextInputType.numberWithOptions(
-            signed: false,
-            decimal: false,
-          ),
+          minLines: 4,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
           onSaved: (value) => _description = value!),
       TextFormField(
         decoration: const InputDecoration(labelText: 'Sales Goal'),
