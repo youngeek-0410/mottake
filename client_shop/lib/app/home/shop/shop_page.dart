@@ -28,20 +28,26 @@ class ShopPage extends ConsumerWidget {
                 _listItem(data.name!, const Icon(Icons.store)),
                 _listItem(data.address!, const Icon(Icons.sort_by_alpha)),
                 _listItem(data.description!, const Icon(Icons.note)),
-                _salesIndicator(data.sales!, data.salesGoal!)
+                _salesIndicator(data.sales!, data.salesGoal!),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                      child: const Text(Strings.edit),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) {
+                          return ShopEditPage(data);
+                        })).then((_) => ref.refresh(shopProvider));
+                      }),
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ElevatedButton(
+                        child: const Text(Strings.signOut),
+                        onPressed: auth.signOut,
+                        style: ElevatedButton.styleFrom(primary: Colors.red))),
               ],
             ),
-            ElevatedButton(
-              child: const Text(Strings.signOut),
-              onPressed: auth.signOut,
-            ),
-            ElevatedButton(
-                child: const Text(Strings.edit),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                    return ShopEditPage(data);
-                  })).then((_) => ref.refresh(shopProvider));
-                }),
           ],
         )),
       );
