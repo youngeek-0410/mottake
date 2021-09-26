@@ -96,7 +96,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         onSaved: (value) => _address = value!,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Price'),
+        decoration: const InputDecoration(labelText: 'Sales Goal'),
         keyboardAppearance: Brightness.light,
         initialValue: _salesGoal.toString(),
         keyboardType: const TextInputType.numberWithOptions(
