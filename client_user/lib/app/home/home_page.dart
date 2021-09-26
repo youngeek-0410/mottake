@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   final List<TabInfo> _tabs = [
     TabInfo("user", CustomerDeletePage()),
     TabInfo("map", MapPage()),
-    TabInfo("purchase", PurchasePage()),
+    //TabInfo("purchase", PurchasePage()),
   ];
 
   HomePage({Key? key}) : super(key: key);

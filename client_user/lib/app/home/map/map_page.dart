@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:client_user/app/home/models/menu.dart';
+import 'package:client_user/app/home/purchase/purchase_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,15 +34,8 @@ class MapsDemo extends ConsumerStatefulWidget {
   MapsDemoState createState() => MapsDemoState();
 }
 
-// final customerProvider = FutureProvider<Shops?>(
-//   (ref) => ref.read(databaseProvider)!.searchShop(_yourLocation),
-// );
-
 class MapsDemoState extends ConsumerState<MapsDemo> {
   late FutureProvider<Shops?> customerProvider;
-  // final customerProvider = FutureProvider<Shops?>(
-  //   (ref) => ref.read(databaseProvider)!.searchShop(_yourLocation),
-  // );
   Completer<GoogleMapController> _controller = Completer();
   Location _locationService = Location();
 
@@ -110,7 +105,8 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
                       title: shop.name,
                       snippet: description,
                       onTap: () {
-                        print("a");
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DisplayShop(shop: shop)));
                       }),
                 );
               }).toSet() ??
@@ -141,10 +137,10 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
   void _getLocation() async {
     _yourLocation = await _locationService.getLocation();
   }
-}
 
-// TODO: 明日の朝やる
-// void displayShop() {
-//   Navigator.of(context).push(MaterialPageRoute(
-//       builder: (context) => ReceiptDialogPage(receipt: receipt, menus: menus)));
-// }
+  // TODO: 明日の朝やる
+  // void displayShop() {
+  //   Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) => DisplayShop(shop: receipt, menus: menus)));
+  // }
+}
