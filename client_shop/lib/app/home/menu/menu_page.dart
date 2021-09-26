@@ -59,7 +59,7 @@ class MenuPage extends ConsumerWidget {
     return ListTile(
       title: Text(title),
       leading: icon,
-      trailing: Text(price.toString() + " yen"),
+      trailing: Text(price.toString() + " 円"),
       onTap: () {
         onTap();
       },

@@ -3,6 +3,7 @@ class Shop {
   String? address;
   String? description;
   int? salesGoal;
+  int? sales;
   double? latitude;
   double? longitude;
   Shop(
@@ -10,6 +11,7 @@ class Shop {
       this.address,
       this.description,
       this.salesGoal,
+      this.sales,
       this.latitude,
       this.longitude});
 
@@ -18,6 +20,7 @@ class Shop {
       address: json["address"],
       description: json["description"],
       salesGoal: json["sales_goal"],
+      sales: json["sales"],
       latitude: json["latitude"],
       longitude: json["longitude"]);
 
@@ -26,6 +29,7 @@ class Shop {
         "address": address,
         "description": description,
         "sales_goal": salesGoal,
+        "sales": sales,
         "latitude": latitude,
         "longitude": longitude
       };

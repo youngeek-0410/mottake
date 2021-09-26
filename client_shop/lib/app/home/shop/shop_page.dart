@@ -1,6 +1,7 @@
 import 'package:client_shop/app/home/models/shop.dart';
 import 'package:client_shop/app/home/shop/shop_edit_page.dart';
 import 'package:client_shop/app/providers.dart';
+import 'package:client_shop/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,15 +28,15 @@ class ShopPage extends ConsumerWidget {
                 _listItem(data.name!, const Icon(Icons.store)),
                 _listItem(data.address!, const Icon(Icons.sort_by_alpha)),
                 _listItem(data.description!, const Icon(Icons.note)),
-                _listItem(data.salesGoal!.toString(), const Icon(Icons.money))
+                _salesIndicator(data.sales!, data.salesGoal!)
               ],
             ),
             ElevatedButton(
-              child: const Text("Sign out"),
+              child: const Text(Strings.signOut),
               onPressed: auth.signOut,
             ),
             ElevatedButton(
-                child: const Text("Edit"),
+                child: const Text(Strings.edit),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                     return ShopEditPage(data);
@@ -53,5 +54,15 @@ class ShopPage extends ConsumerWidget {
 
   Widget _listItem(String title, Icon icon) {
     return ListTile(title: Text(title), leading: icon);
+  }
+
+  Widget _salesIndicator(int sales, int salesGoal) {
+    return ListTile(
+      leading: const Icon(Icons.money),
+      title: Text("$sales / $salesGoal yen"),
+      subtitle: LinearProgressIndicator(
+        value: sales / salesGoal,
+      ),
+    );
   }
 }

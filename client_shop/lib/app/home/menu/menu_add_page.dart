@@ -1,6 +1,7 @@
 import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/providers.dart';
+import 'package:client_shop/constants/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Menu Creation Page")),
+        appBar: AppBar(title: const Text(Strings.menuCreationPage)),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -36,7 +37,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
             onPressed: () {
               _submit();
             },
-            child: const Text("Register"))
+            child: const Text(Strings.register))
       ]),
     );
   }
@@ -71,7 +72,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
   List<Widget> _buildFormChildren() {
     return [
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Name'),
+        decoration: const InputDecoration(labelText: Strings.menuName),
         keyboardAppearance: Brightness.light,
         initialValue: _name,
         validator: (value) =>
@@ -79,7 +80,7 @@ class _MenuAddPageState extends ConsumerState<MenuAddPage> {
         onSaved: (value) => _name = value,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Price'),
+        decoration: const InputDecoration(labelText: Strings.price),
         keyboardAppearance: Brightness.light,
         initialValue: "",
         keyboardType: const TextInputType.numberWithOptions(

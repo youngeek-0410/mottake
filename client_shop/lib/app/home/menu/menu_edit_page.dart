@@ -1,6 +1,7 @@
 import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/menu.dart';
 import 'package:client_shop/app/providers.dart';
+import 'package:client_shop/constants/strings.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +32,7 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
   Widget build(BuildContext contex) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Menu Editing Page"),
+          title: const Text(Strings.menuEditingPage),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -50,14 +51,14 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
             onPressed: () {
               _submit();
             },
-            child: const Text("Confirm")),
+            child: const Text(Strings.confirm)),
         ElevatedButton(
             onPressed: () async {
               if (await confirm(context)) {
                 _delete();
               }
             },
-            child: const Text("Delete"),
+            child: const Text(Strings.delete),
             style: ElevatedButton.styleFrom(primary: Colors.red)),
       ]),
     );
@@ -109,7 +110,7 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
   List<Widget> _buildFormChildren() {
     return [
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Name'),
+        decoration: const InputDecoration(labelText: Strings.menuName),
         keyboardAppearance: Brightness.light,
         initialValue: _name,
         validator: (value) =>
@@ -117,7 +118,7 @@ class _MenuDetailPageState extends ConsumerState<MenuEditPage> {
         onSaved: (value) => _name = value,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Price'),
+        decoration: const InputDecoration(labelText: Strings.price),
         keyboardAppearance: Brightness.light,
         initialValue: _price.toString(),
         validator: (value) {

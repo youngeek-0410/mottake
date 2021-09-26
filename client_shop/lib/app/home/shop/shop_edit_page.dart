@@ -1,6 +1,7 @@
 import 'package:client_shop/app/home/common_widget.dart';
 import 'package:client_shop/app/home/models/shop.dart';
 import 'package:client_shop/app/providers.dart';
+import 'package:client_shop/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,7 +33,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
   Widget build(BuildContext contex) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Shop Editing Page"),
+          title: const Text(Strings.shopEditingPage),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -51,7 +52,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
             onPressed: () {
               _update();
             },
-            child: const Text("Confirm")),
+            child: const Text(Strings.confirm)),
       ]),
     );
   }
@@ -90,7 +91,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
   List<Widget> _buildFormChildren() {
     return [
       TextFormField(
-        decoration: const InputDecoration(labelText: 'ShopName'),
+        decoration: const InputDecoration(labelText: Strings.shopName),
         keyboardAppearance: Brightness.light,
         initialValue: _name,
         validator: (value) =>
@@ -98,7 +99,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
         onSaved: (value) => _name = value!,
       ),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Address'),
+        decoration: const InputDecoration(labelText: Strings.shopAddress),
         keyboardAppearance: Brightness.light,
         initialValue: _address,
         validator: (value) =>
@@ -106,7 +107,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
         onSaved: (value) => _address = value!,
       ),
       TextFormField(
-          decoration: const InputDecoration(labelText: 'Description'),
+          decoration: const InputDecoration(labelText: Strings.description),
           keyboardAppearance: Brightness.light,
           initialValue: _description,
           minLines: 4,
@@ -114,7 +115,7 @@ class _ShopEditPageState extends ConsumerState<ShopEditPage> {
           keyboardType: TextInputType.multiline,
           onSaved: (value) => _description = value!),
       TextFormField(
-        decoration: const InputDecoration(labelText: 'Sales Goal'),
+        decoration: const InputDecoration(labelText: Strings.salesGoal),
         keyboardAppearance: Brightness.light,
         initialValue: _salesGoal.toString(),
         keyboardType: const TextInputType.numberWithOptions(
