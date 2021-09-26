@@ -102,12 +102,13 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
       return _customerProvider.when(data: (data) {
         return GoogleMap(
           markers: data?.shops?.map((Shop shop) {
+                String? description = "売上 ¥${shop.sales} 目標 ¥${shop.salesGoal}";
                 return Marker(
                   markerId: MarkerId(shop.uid!),
                   position: LatLng(shop.latitude!, shop.longitude!),
                   infoWindow: InfoWindow(
                       title: shop.name,
-                      snippet: shop.description,
+                      snippet: description,
                       onTap: () {
                         print("a");
                       }),
