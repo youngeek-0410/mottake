@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"regexp"
 
 	"firebase.google.com/go/v4/auth"
@@ -32,6 +33,12 @@ var (
 	errCouldNotUpdateShop = "Could Not Update Shop"
 	errNotAuthorized      = "Not Authorized"
 	errCouldNotDeleteShop = "Could Not Delete Shop"
+
+	errCouldNotUpdateGenre = "Could Not Update Genre"
+
+	errCouldNotCreateCustomer = "Could Not Create Customer"
+	errCouldNotUpdateCustomer = "Could Not Update Customer"
+	errCouldNotDeleteCustomer = "Could Not Delete Customer"
 )
 
 type APIError struct {
@@ -56,6 +63,9 @@ func AddressToCoordinate(address string) (geocoder.Coordinate, error) {
 	response, err := client.Search(geocoder.RequestParam{"query": address})
 	if err != nil {
 		return init, err
+	}
+	if response.ResultInfo.Count <= 0 {
+		return init, errors.New("Result infomation is zero.")
 	}
 	result := response.Feature[0]
 	return result.Geometry.Coordinates.ToCoordinate(), nil

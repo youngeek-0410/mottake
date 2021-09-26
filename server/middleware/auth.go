@@ -47,7 +47,7 @@ func Auth() gin.HandlerFunc {
 }
 
 func Dummy() gin.HandlerFunc {
-	return func(c *gin.Context){
+	return func(c *gin.Context) {
 		token := &auth.Token{UID: "dummy"}
 		c.Set("token", token)
 		c.Next()
