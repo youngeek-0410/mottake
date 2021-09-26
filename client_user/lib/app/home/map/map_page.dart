@@ -137,10 +137,4 @@ class MapsDemoState extends ConsumerState<MapsDemo> {
   void _getLocation() async {
     _yourLocation = await _locationService.getLocation();
   }
-
-  // TODO: 明日の朝やる
-  // void displayShop() {
-  //   Navigator.of(context).push(MaterialPageRoute(
-  //       builder: (context) => DisplayShop(shop: receipt, menus: menus)));
-  // }
 }

@@ -37,19 +37,10 @@ class DisplayShopState extends ConsumerState<DisplayShop> {
         (ref) => ref.read(databaseProvider)!.getMenus(shop.uid!));
   }
 
-  // final List<Menu> menus;
-  // late final FutureProvider<MenuList?> menuProvider;
-  //= FutureProvider<MenuList?>(
-  //   (ref) => ref.read(databaseProvider)!.getMenus(shop.uid!),
-  // );
   Map<int, int> shoppingcourt = {};
 
   @override
   Widget build(BuildContext context) {
-    //final List<Menu> menus;
-    // final menuProvider = FutureProvider<MenuList?>(
-    //   (ref) => ref.read(databaseProvider)!.getMenus(shop.uid!),
-    // );
     final _menuProvider = ref.watch(menuProvider);
     return Scaffold(
       appBar: AppBar(),
@@ -60,7 +51,8 @@ class DisplayShopState extends ConsumerState<DisplayShop> {
               return ListView(
                 shrinkWrap: true,
                 children: [
-                  _listShopData(shop.name!, Icon(Icons.shop)),
+                  _listShopData(
+                      shop.name!, Icon(Icons.shop), shop.description!),
                   ...?(data?.menus?.map((menu) {
                     return _listMenu(menu.name!, menu.price!, menu.id!);
                   }).toList()),
@@ -112,10 +104,6 @@ class DisplayShopState extends ConsumerState<DisplayShop> {
         ),
       ),
     );
-    // return ListTile(
-    //   title: Text(title),
-    //   trailing: Text("$price yen"),
-    // );
   }
 
   Widget _incrementButton(int id) {
@@ -143,23 +131,12 @@ class DisplayShopState extends ConsumerState<DisplayShop> {
         backgroundColor: Colors.white);
   }
 
-  Widget _listShopData(String title, Icon icon) {
-    return ListTile(title: Text(title), leading: icon);
+  Widget _listShopData(String title, Icon icon, String description) {
+    return ListTile(
+        title: Text(title), leading: icon, subtitle: Text(description));
   }
 
   void _decidePurchase(BuildContext context, WidgetRef ref) async {
-    // try {
-    //   //final database = ref.read(databaseProvider)!;
-    //   // await database.decidePurchase(receipt);
-    //   Navigator.of(context).pop();
-    // } catch (e) {
-    //   await showDialog(
-    //       context: context,
-    //       builder: (_) => errorDialog("Failed to register receipt", () {
-    //             Navigator.of(context).pop();
-    //           }));
-    //   Navigator.of(context).pop();
-    // }
     final qrcode = ref.read(databaseProvider)!.generateQRcode(shoppingcourt);
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return QrCodeLayout(qrCode: qrcode);
